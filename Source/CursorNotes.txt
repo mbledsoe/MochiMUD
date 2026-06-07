@@ -58,6 +58,13 @@
 - When I asked it to block commands based on Dead state, it did not identify any abstraction and added a new policy specific to dead state.  I'm leaving it for now.
 - Adequately added a grouping mechanism but failed to recognize that it allows players to issue move commands while in a state that should not be allowed.
 	- Corrected issue with guidance
+- Adequately added group fight dynamics
+- Added conditional room formatting.
+
+Overall impression for 6/7/2026:
+I was extremely productive generating code for a system that I already understand pretty well.  I don't know if I would have the same success with a problem domain which I haven't previously explored.
+Cursor made the code generation faster and easier.  Cursor also made several mistakes including some severe architectural mistakes.  I continue to believe that very close supervision is required to 
+create high-quality code with Cursor.
 
 
 		

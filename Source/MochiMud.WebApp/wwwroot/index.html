@@ -46,6 +46,10 @@
             .withAutomaticReconnect()
             .build();
 
+        connection.on("ReceiveMessage", (message) => {
+            status.textContent = `Server says: ${message}`;
+        });
+
         async function start() {
             try {
                 await connection.start();
@@ -59,6 +63,7 @@
 
         async function sendCommand(commandText) {
             const command = commandText.trim();
+
             if (!command) {
                 status.textContent = "Enter a command before sending.";
                 return;

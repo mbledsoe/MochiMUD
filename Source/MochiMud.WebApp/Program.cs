@@ -1,3 +1,4 @@
+using MochiMud.WebApp.Commands;
 using MochiMud.WebApp.Hubs;
 
 namespace MochiMud.WebApp
@@ -8,6 +9,8 @@ namespace MochiMud.WebApp
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddSingleton<CommandProcessor>();
+            builder.Services.AddSingleton<ICommandHandler, LookHandler>();
             builder.Services.AddSignalR();
 
             var app = builder.Build();

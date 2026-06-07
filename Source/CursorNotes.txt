@@ -1,0 +1,6 @@
+6/76/2026
+- Adequate setup for the initial basic SignalR connection
+- Adequate minimal setup command processor, LookCommand dispatch, including DI setup
+- Architecture failure when telling it to send messages back to the client.  SignalR infrastructure details leaked into the rest of the app, including command processing and command handlers.
+	- Had to give architectural guidance to abstract away SignalR infrastructure from the command handling code.
+		- It produced an adequately abstracted version of the client (for now)

@@ -15,6 +15,8 @@ namespace MochiMud.WebApp.Commands
 
         public override string CommandName => "look";
 
+        public override bool CanExecuteInFight => true;
+
         public override async Task HandleAsync(string command, ICommandClient client, Player player, CancellationToken cancellationToken = default)
         {
             logger.LogInformation("Handling look command: {Command}", command);

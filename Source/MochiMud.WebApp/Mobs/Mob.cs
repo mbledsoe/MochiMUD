@@ -1,3 +1,4 @@
+using MochiMud.WebApp.Combat;
 using MochiMud.WebApp.World;
 
 namespace MochiMud.WebApp.Mobs
@@ -14,6 +15,7 @@ namespace MochiMud.WebApp.Mobs
             Name = name;
             CurrentRoomId = currentRoomId;
             HitPoints = 50;
+            Weapon = new Weapon("A rusty epee", new DamageDiceSpecification(1, 6));
         }
 
         public string Name { get; }
@@ -21,5 +23,7 @@ namespace MochiMud.WebApp.Mobs
         public Guid CurrentRoomId { get; set; }
 
         public int HitPoints { get; set; }
+
+        public Weapon Weapon { get; }
     }
 }

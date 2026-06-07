@@ -45,6 +45,8 @@
 		- Adequately refactored into a game loop with command queue and hosted service after being given very specific guidance
 			- The CommandQueue had a bug where it would endlessly drain under heavy input and prevent the rest of the game logic from updating.  I asked it to plan a solution and it did not provide the solution I was looking for.
 			- Adequately converted it to draining all commands per iteration snapshot.
+- Adequately added command name shortcuts
+- Adequately separated Program.cs DI registrations into logical units
 		
 	
 

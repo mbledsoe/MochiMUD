@@ -38,13 +38,29 @@ namespace MochiMud.WebApp.Commands
                 return null;
             }
 
-            if (!commandHandlers.TryGetValue(commandName, out var commandHandler))
+            if (commandHandlers.TryGetValue(commandName, out var commandHandler))
             {
-                logger.LogWarning("No command handler registered for command: {CommandName}", commandName);
+                return commandHandler;
+            }
+
+            var matchingHandlers = commandHandlers
+                .Where(handlerEntry => handlerEntry.Key.StartsWith(commandName, StringComparison.OrdinalIgnoreCase))
+                .Select(handlerEntry => handlerEntry.Value)
+                .ToList();
+
+            if (matchingHandlers.Count == 1)
+            {
+                return matchingHandlers[0];
+            }
+
+            if (matchingHandlers.Count > 1)
+            {
+                logger.LogWarning("Command abbreviation is ambiguous: {CommandName}", commandName);
                 return null;
             }
 
-            return commandHandler;
+            logger.LogWarning("No command handler registered for command: {CommandName}", commandName);
+            return null;
         }
     }
 }

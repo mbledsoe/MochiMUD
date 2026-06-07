@@ -69,7 +69,7 @@ namespace MochiMud.WebApp.Commands
 
         private async Task ProcessRoundAsync(ActiveFight activeFight, DateTimeOffset now, CancellationToken cancellationToken)
         {
-            var damage = RollDamage();
+            var damage = activeFight.Player.Weapon.DamageDice.Roll();
             activeFight.Mob.HitPoints -= damage;
 
             await activeFight.Client.SendMessageAsync(
@@ -83,11 +83,6 @@ namespace MochiMud.WebApp.Commands
             }
 
             activeFight.NextRoundAt = now.Add(RoundDelay);
-        }
-
-        private static int RollDamage()
-        {
-            return Random.Shared.Next(1, 7) + Random.Shared.Next(1, 7);
         }
 
         private class ActiveFight

@@ -1,3 +1,4 @@
+using MochiMud.WebApp.Combat;
 using MochiMud.WebApp.World;
 
 namespace MochiMud.WebApp.Players
@@ -12,6 +13,7 @@ namespace MochiMud.WebApp.Players
             Name = name;
             CurrentRoomId = WorldConstants.DefaultStartRoomId;
             HitPoints = 50;
+            Weapon = new Weapon("A rusty epee", new DamageDiceSpecification(1, 6));
         }
 
         public Guid Id { get; }
@@ -21,6 +23,8 @@ namespace MochiMud.WebApp.Players
         public Guid CurrentRoomId { get; set; }
 
         public int HitPoints { get; set; }
+
+        public Weapon Weapon { get; }
 
         public bool IsInFight => Volatile.Read(ref isInFight) == 1;
 

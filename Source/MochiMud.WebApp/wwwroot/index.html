@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MochiMUD SignalR Test</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            margin: 2rem;
+            max-width: 40rem;
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+        #status {
+            margin-top: 1rem;
+            white-space: pre-line;
+        }
+    </style>
+</head>
+<body>
+    <h1>MochiMUD SignalR Test</h1>
+    <p>Connect to the MudHub and send a test command to the server.</p>
+
+    <form id="commandForm">
+        <label for="commandInput">Command</label>
+        <input id="commandInput" type="text" value="look">
+        <button id="sendButton" type="submit" disabled>Send Command</button>
+    </form>
+
+    <div id="status">Connecting...</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@microsoft/signalr@latest/dist/browser/signalr.min.js"></script>
+    <script>
+        const status = document.getElementById("status");
+        const form = document.getElementById("commandForm");
+        const input = document.getElementById("commandInput");
+        const sendButton = document.getElementById("sendButton");
+
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/mudHub")
+            .withAutomaticReconnect()
+            .build();
+
+        async function start() {
+            try {
+                await connection.start();
+                sendButton.disabled = false;
+                status.textContent = "Connected. Sending test command...";
+                await sendCommand(input.value);
+            } catch (error) {
+                status.textContent = `Connection failed: ${error}`;
+            }
+        }
+
+        async function sendCommand(commandText) {
+            const command = commandText.trim();
+            if (!command) {
+                status.textContent = "Enter a command before sending.";
+                return;
+            }
+
+            try {
+                await connection.invoke("SendCommand", command);
+                status.textContent = `Sent command: ${command}`;
+            } catch (error) {
+                status.textContent = `Send failed: ${error}`;
+            }
+        }
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            await sendCommand(input.value);
+        });
+
+        start();
+    </script>
+</body>
+</html>

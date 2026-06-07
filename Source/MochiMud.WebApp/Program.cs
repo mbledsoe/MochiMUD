@@ -1,4 +1,5 @@
 using MochiMud.WebApp.Commands;
+using MochiMud.WebApp.GameLoop;
 using MochiMud.WebApp.Hubs;
 using MochiMud.WebApp.Mobs;
 using MochiMud.WebApp.Players;
@@ -13,10 +14,14 @@ namespace MochiMud.WebApp
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddSingleton<CommandExecutionQueue>();
+            builder.Services.AddSingleton<CommandExecutor>();
             builder.Services.AddSingleton<ICommandNotificationService, SignalRCommandNotificationService>();
             builder.Services.AddSingleton<CommandProcessor>();
+            builder.Services.AddSingleton<FightService>();
             builder.Services.AddSingleton<MoveService>();
             builder.Services.AddSingleton<RoomPresenter>();
+            builder.Services.AddSingleton<ICommandHandler, FleeHandler>();
+            builder.Services.AddSingleton<ICommandHandler, KillHandler>();
             builder.Services.AddSingleton<ICommandHandler, LookHandler>();
             builder.Services.AddSingleton<ICommandHandler, MoveHandler>();
 
@@ -47,6 +52,7 @@ namespace MochiMud.WebApp
             builder.Services.AddSingleton<IPlayerDataService, PlayerDataService>();
             builder.Services.AddSingleton<PlayerConnectionRegistry>();
             builder.Services.AddSingleton<IWorldDataService, StaticWorldDataService>();
+            builder.Services.AddHostedService<GameLoopService>();
             builder.Services.AddSignalR();
 
             var app = builder.Build();

@@ -3,7 +3,7 @@ using MochiMud.WebApp.World;
 
 namespace MochiMud.WebApp.Commands
 {
-    public class DirectionMoveHandler : ICommandHandler
+    public class DirectionMoveHandler : CommandHandlerBase
     {
         private readonly Direction direction;
         private readonly ILogger<DirectionMoveHandler> logger;
@@ -21,9 +21,9 @@ namespace MochiMud.WebApp.Commands
             this.moveService = moveService;
         }
 
-        public string CommandName { get; }
+        public override string CommandName { get; }
 
-        public async Task HandleAsync(string command, ICommandClient client, Player player, CancellationToken cancellationToken = default)
+        public override async Task HandleAsync(string command, ICommandClient client, Player player, CancellationToken cancellationToken = default)
         {
             logger.LogInformation("Handling direction move command: {Command}", command);
 

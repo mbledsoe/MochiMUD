@@ -9,20 +9,20 @@ namespace MochiMud.WebApp.Hubs
         private const string FakePlayerNamePrefix = "Test Player";
 
         private readonly CommandExecutionQueue commandExecutionQueue;
-        private readonly CommandProcessor commandProcessor;
+        private readonly IHubContext<MudHub> hubContext;
         private readonly ILogger<MudHub> logger;
         private readonly PlayerConnectionRegistry playerConnectionRegistry;
         private readonly IPlayerDataService playerDataService;
 
         public MudHub(
             CommandExecutionQueue commandExecutionQueue,
-            CommandProcessor commandProcessor,
+            IHubContext<MudHub> hubContext,
             ILogger<MudHub> logger,
             PlayerConnectionRegistry playerConnectionRegistry,
             IPlayerDataService playerDataService)
         {
             this.commandExecutionQueue = commandExecutionQueue;
-            this.commandProcessor = commandProcessor;
+            this.hubContext = hubContext;
             this.logger = logger;
             this.playerConnectionRegistry = playerConnectionRegistry;
             this.playerDataService = playerDataService;
@@ -65,11 +65,9 @@ namespace MochiMud.WebApp.Hubs
                 return;
             }
 
-            var client = new SignalRCommandClient(Clients.Caller);
+            var client = new SignalRCommandClient(hubContext, Context.ConnectionId);
 
-            await commandExecutionQueue.ExecuteAsync(
-                () => commandProcessor.ProcessAsync(command, client, player, Context.ConnectionAborted),
-                Context.ConnectionAborted);
+            await commandExecutionQueue.EnqueueAsync(new QueuedCommand(command, client, player), Context.ConnectionAborted);
         }
     }
 }

@@ -2,7 +2,7 @@ using MochiMud.WebApp.Players;
 
 namespace MochiMud.WebApp.Commands
 {
-    public class LookHandler : ICommandHandler
+    public class LookHandler : CommandHandlerBase
     {
         private readonly ILogger<LookHandler> logger;
         private readonly RoomPresenter roomPresenter;
@@ -13,9 +13,9 @@ namespace MochiMud.WebApp.Commands
             this.roomPresenter = roomPresenter;
         }
 
-        public string CommandName => "look";
+        public override string CommandName => "look";
 
-        public async Task HandleAsync(string command, ICommandClient client, Player player, CancellationToken cancellationToken = default)
+        public override async Task HandleAsync(string command, ICommandClient client, Player player, CancellationToken cancellationToken = default)
         {
             logger.LogInformation("Handling look command: {Command}", command);
 

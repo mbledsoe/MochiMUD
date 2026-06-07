@@ -8,16 +8,18 @@ namespace MochiMud.WebApp.Hubs
 {
     public class SignalRCommandClient : ICommandClient
     {
-        private readonly IClientProxy clientProxy;
+        private readonly string connectionId;
+        private readonly IHubContext<MudHub> hubContext;
 
-        public SignalRCommandClient(IClientProxy clientProxy)
+        public SignalRCommandClient(IHubContext<MudHub> hubContext, string connectionId)
         {
-            this.clientProxy = clientProxy;
+            this.hubContext = hubContext;
+            this.connectionId = connectionId;
         }
 
         public async Task SendMessageAsync(string message, CancellationToken cancellationToken = default)
         {
-            await clientProxy.SendAsync("ReceiveMessage", message, cancellationToken);
+            await hubContext.Clients.Client(connectionId).SendAsync("ReceiveMessage", message, cancellationToken);
         }
 
         public async Task SendRoomAsync(

@@ -3,7 +3,7 @@ using MochiMud.WebApp.World;
 
 namespace MochiMud.WebApp.Commands
 {
-    public class MoveHandler : ICommandHandler
+    public class MoveHandler : CommandHandlerBase
     {
         private readonly ILogger<MoveHandler> logger;
         private readonly MoveService moveService;
@@ -14,13 +14,13 @@ namespace MochiMud.WebApp.Commands
             this.moveService = moveService;
         }
 
-        public string CommandName => "move";
+        public override string CommandName => "move";
 
-        public async Task HandleAsync(string command, ICommandClient client, Player player, CancellationToken cancellationToken = default)
+        public override async Task HandleAsync(string command, ICommandClient client, Player player, CancellationToken cancellationToken = default)
         {
             logger.LogInformation("Handling move command: {Command}", command);
 
-            var direction = GetDirection(command);
+            var direction = CommandTextParser.GetEnumArgument<Direction>(command);
 
             if (direction is null)
             {
@@ -29,20 +29,6 @@ namespace MochiMud.WebApp.Commands
             }
 
             await moveService.MoveAsync(direction.Value, client, player, cancellationToken);
-        }
-
-        private static Direction? GetDirection(string command)
-        {
-            var commandParts = command.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
-
-            if (commandParts.Length < 2)
-            {
-                return null;
-            }
-
-            return Enum.TryParse<Direction>(commandParts[1], true, out var direction)
-                ? direction
-                : null;
         }
     }
 }

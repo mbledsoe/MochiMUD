@@ -16,43 +16,35 @@ namespace MochiMud.WebApp.Commands
             this.logger = logger;
         }
 
-        public async Task ProcessAsync(string command, ICommandClient client, Player player, CancellationToken cancellationToken = default)
+        public Task ProcessAsync(string command, ICommandClient client, Player player, CancellationToken cancellationToken = default)
         {
-            var commandName = GetCommandName(command);
+            var commandHandler = GetCommandHandler(command);
+
+            if (commandHandler is null)
+            {
+                return Task.CompletedTask;
+            }
+
+            return commandHandler.HandleAsync(command, client, player, cancellationToken);
+        }
+
+        public ICommandHandler? GetCommandHandler(string command)
+        {
+            var commandName = CommandTextParser.GetCommandName(command);
 
             if (commandName is null)
             {
                 logger.LogWarning("Received an empty command.");
-                return;
+                return null;
             }
 
             if (!commandHandlers.TryGetValue(commandName, out var commandHandler))
             {
                 logger.LogWarning("No command handler registered for command: {CommandName}", commandName);
-                return;
-            }
-
-            await commandHandler.HandleAsync(command, client, player, cancellationToken);
-        }
-
-        private static string? GetCommandName(string command)
-        {
-            var trimmedCommand = command.AsSpan().Trim();
-
-            if (trimmedCommand.IsEmpty)
-            {
                 return null;
             }
 
-            for (var index = 0; index < trimmedCommand.Length; index++)
-            {
-                if (char.IsWhiteSpace(trimmedCommand[index]))
-                {
-                    return trimmedCommand[..index].ToString();
-                }
-            }
-
-            return trimmedCommand.ToString();
+            return commandHandler;
         }
     }
 }

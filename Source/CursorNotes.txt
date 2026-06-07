@@ -30,4 +30,21 @@
 	- Separated the player data service after guidance but used a bizarre IDictionary<Player,byte> with a byte value of 0 for all players.  Presumably because there is no player ID currently.
 	- Adequately resolved this issue after guidance.
 - Excelled at creating shortcut handlers for north, south, east, west.  Adequately separated move logic from the handlers and reused it across handlers.
+- Added the KillCommand but it still did not abstract the parameter parsing.
+	- Adequately separated command parsing after guidance (although it's a bit more complex than required, probably).
+- Adequately created a running fight with 2 second delay for a single player / single mob fight.
+- Completely failed when I told it that a player cannot issue any commands while in a fight state.  It put the fight state check in the SignalR Hub instead of at the application level.
+	- Adequately separated the fight check after guidance.  It did not predict that we would have more complex state-based rules so we will see how it reacts to the next prompt.
+- Failed again when I asked it to add a flee command which can be issued during a fight.  It added this logic directly to the CommandExecutor with hardcoded "flee" string.
+	- Adequately resolved this after guidance.  Did not anticipate many possible states, so it's still very specific to "IsInFight"
+- It created a bug where the flee command cannot be processed during a fight and are all processed after the fight completes.
+	- It is failing to recognize that there should be separation between command handling and the fight processing.  I need to give it very specific guidance.
+	- Adequately separated the fight processing from the command queue.  However, it's not thread safe and there are race conditions between flee and the fight loop.
+	- I gave it specific guidance about the flee/fight race condition and it created a semaphore on Player and sent the logic of both through a higher-order function there.
+		- I gave it guidance on creating a game loop, which put it into plan mode
+		- Adequately refactored into a game loop with command queue and hosted service after being given very specific guidance
+			- The CommandQueue had a bug where it would endlessly drain under heavy input and prevent the rest of the game logic from updating.  I asked it to plan a solution and it did not provide the solution I was looking for.
+			- Adequately converted it to draining all commands per iteration snapshot.
+		
+	
 

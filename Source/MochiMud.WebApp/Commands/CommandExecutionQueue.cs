@@ -1,21 +1,35 @@
+using System.Collections.Concurrent;
+
 namespace MochiMud.WebApp.Commands
 {
     public class CommandExecutionQueue
     {
-        private readonly SemaphoreSlim commandSemaphore = new(1, 1);
+        private readonly ConcurrentQueue<QueuedCommand> queuedCommands = new();
 
-        public async Task ExecuteAsync(Func<Task> command, CancellationToken cancellationToken = default)
+        public Task EnqueueAsync(QueuedCommand queuedCommand, CancellationToken cancellationToken = default)
         {
-            await commandSemaphore.WaitAsync(cancellationToken);
+            cancellationToken.ThrowIfCancellationRequested();
+            queuedCommands.Enqueue(queuedCommand);
 
-            try
+            return Task.CompletedTask;
+        }
+
+        public IReadOnlyCollection<QueuedCommand> Drain()
+        {
+            var commandsToDrain = queuedCommands.Count;
+            var drainedCommands = new List<QueuedCommand>(commandsToDrain);
+
+            for (var i = 0; i < commandsToDrain; i++)
             {
-                await command();
+                if (!queuedCommands.TryDequeue(out var queuedCommand))
+                {
+                    break;
+                }
+
+                drainedCommands.Add(queuedCommand);
             }
-            finally
-            {
-                commandSemaphore.Release();
-            }
+
+            return drainedCommands;
         }
     }
 }

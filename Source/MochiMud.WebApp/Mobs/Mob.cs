@@ -13,10 +13,13 @@ namespace MochiMud.WebApp.Mobs
         {
             Name = name;
             CurrentRoomId = currentRoomId;
+            HitPoints = 50;
         }
 
         public string Name { get; }
 
         public Guid CurrentRoomId { get; set; }
+
+        public int HitPoints { get; set; }
     }
 }

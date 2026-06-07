@@ -4,3 +4,8 @@
 - Architecture failure when telling it to send messages back to the client.  SignalR infrastructure details leaked into the rest of the app, including command processing and command handlers.
 	- Had to give architectural guidance to abstract away SignalR infrastructure from the command handling code.
 		- It produced an adequately abstracted version of the client (for now)
+- When I told it to send room data to the client, it assumed I meant concatenating the string inside the LookHandler.  I wanted to send the actual data
+	- Adequately abstracted the room data to text conversion after guidance
+- Adequately converted the output on the index.html page to a list of divs.
+- Major archetectural failure when I asked it to generate a set of rooms reflected a chessboard.  Added a bunch of logic, including generating the data to the StaticWorldDataService
+	- It failed to separate the concerns of serving world data vs. generating a chessboard world.

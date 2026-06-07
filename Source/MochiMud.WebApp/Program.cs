@@ -1,5 +1,6 @@
 using MochiMud.WebApp.Commands;
 using MochiMud.WebApp.Hubs;
+using MochiMud.WebApp.World;
 
 namespace MochiMud.WebApp
 {
@@ -11,6 +12,7 @@ namespace MochiMud.WebApp
 
             builder.Services.AddSingleton<CommandProcessor>();
             builder.Services.AddSingleton<ICommandHandler, LookHandler>();
+            builder.Services.AddSingleton<IWorldDataService, StaticWorldDataService>();
             builder.Services.AddSignalR();
 
             var app = builder.Build();

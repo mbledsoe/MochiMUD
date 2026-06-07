@@ -1,3 +1,6 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="CursorNotes.txt" />
+  </Folder>
   <Project Path="MochiMud.WebApp/MochiMud.WebApp.csproj" />
 </Solution>

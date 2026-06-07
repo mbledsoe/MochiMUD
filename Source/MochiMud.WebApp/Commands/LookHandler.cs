@@ -19,7 +19,7 @@ namespace MochiMud.WebApp.Commands
         {
             logger.LogInformation("Handling look command: {Command}", command);
 
-            var roomWasSent = await roomPresenter.TrySendRoomAsync(player.CurrentRoomId, client, cancellationToken);
+            var roomWasSent = await roomPresenter.TrySendRoomAsync(player.CurrentRoomId, client, player, cancellationToken);
 
             if (!roomWasSent)
             {

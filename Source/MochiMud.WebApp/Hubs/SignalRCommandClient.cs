@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.SignalR;
 using MochiMud.WebApp.Commands;
 using MochiMud.WebApp.Mobs;
+using MochiMud.WebApp.Players;
 using MochiMud.WebApp.World;
 
 namespace MochiMud.WebApp.Hubs
@@ -19,7 +20,11 @@ namespace MochiMud.WebApp.Hubs
             await clientProxy.SendAsync("ReceiveMessage", message, cancellationToken);
         }
 
-        public async Task SendRoomAsync(Room room, IReadOnlyCollection<Mob> mobs, CancellationToken cancellationToken = default)
+        public async Task SendRoomAsync(
+            Room room,
+            IReadOnlyCollection<Mob> mobs,
+            IReadOnlyCollection<Player> players,
+            CancellationToken cancellationToken = default)
         {
             var message = $"{room.Title}{Environment.NewLine}{room.Description}";
 
@@ -27,6 +32,12 @@ namespace MochiMud.WebApp.Hubs
             {
                 var mobText = string.Join(Environment.NewLine, mobs.Select(mob => $"The {mob.Name} is standing here."));
                 message = $"{message}{Environment.NewLine}{mobText}";
+            }
+
+            if (players.Count > 0)
+            {
+                var playerText = string.Join(Environment.NewLine, players.Select(player => $"{player.Name} is standing here."));
+                message = $"{message}{Environment.NewLine}{playerText}";
             }
 
             await SendMessageAsync(message, cancellationToken);

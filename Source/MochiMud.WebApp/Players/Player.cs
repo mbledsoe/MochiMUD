@@ -6,9 +6,12 @@ namespace MochiMud.WebApp.Players
     {
         public Player(string name)
         {
+            Id = Guid.NewGuid();
             Name = name;
             CurrentRoomId = WorldConstants.DefaultStartRoomId;
         }
+
+        public Guid Id { get; }
 
         public string Name { get; }
 

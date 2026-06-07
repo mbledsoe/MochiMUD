@@ -6,26 +6,33 @@ namespace MochiMud.WebApp.Hubs
 {
     public class MudHub : Hub
     {
-        private const string FakePlayerName = "Test Player";
+        private const string FakePlayerNamePrefix = "Test Player";
 
+        private readonly CommandExecutionQueue commandExecutionQueue;
         private readonly CommandProcessor commandProcessor;
         private readonly ILogger<MudHub> logger;
         private readonly PlayerConnectionRegistry playerConnectionRegistry;
+        private readonly IPlayerDataService playerDataService;
 
         public MudHub(
+            CommandExecutionQueue commandExecutionQueue,
             CommandProcessor commandProcessor,
             ILogger<MudHub> logger,
-            PlayerConnectionRegistry playerConnectionRegistry)
+            PlayerConnectionRegistry playerConnectionRegistry,
+            IPlayerDataService playerDataService)
         {
+            this.commandExecutionQueue = commandExecutionQueue;
             this.commandProcessor = commandProcessor;
             this.logger = logger;
             this.playerConnectionRegistry = playerConnectionRegistry;
+            this.playerDataService = playerDataService;
         }
 
         public override async Task OnConnectedAsync()
         {
-            var player = new Player(FakePlayerName);
+            var player = new Player($"{FakePlayerNamePrefix} {Random.Shared.Next(0, 10000):0000}");
 
+            playerDataService.Add(player);
             playerConnectionRegistry.AddOrUpdate(Context.ConnectionId, player);
 
             logger.LogInformation(
@@ -38,7 +45,11 @@ namespace MochiMud.WebApp.Hubs
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            playerConnectionRegistry.Remove(Context.ConnectionId);
+            if (playerConnectionRegistry.TryRemovePlayer(Context.ConnectionId, out var player) && player is not null)
+            {
+                playerDataService.Remove(player);
+            }
+
             logger.LogInformation("Removed player for connection {ConnectionId}.", Context.ConnectionId);
 
             await base.OnDisconnectedAsync(exception);
@@ -56,7 +67,9 @@ namespace MochiMud.WebApp.Hubs
 
             var client = new SignalRCommandClient(Clients.Caller);
 
-            await commandProcessor.ProcessAsync(command, client, player, Context.ConnectionAborted);
+            await commandExecutionQueue.ExecuteAsync(
+                () => commandProcessor.ProcessAsync(command, client, player, Context.ConnectionAborted),
+                Context.ConnectionAborted);
         }
     }
 }

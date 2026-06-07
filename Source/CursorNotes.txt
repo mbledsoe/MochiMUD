@@ -1,4 +1,4 @@
-6/76/2026
+6/7/2026
 - Adequate setup for the initial basic SignalR connection
 - Adequate minimal setup command processor, LookCommand dispatch, including DI setup
 - Architecture failure when telling it to send messages back to the client.  SignalR infrastructure details leaked into the rest of the app, including command processing and command handlers.
@@ -21,3 +21,13 @@
 	- Its solution after guidance was somewhat unexpected.  It added a RoomPresenter instead of a common data builder.  I'm going to let it ride for now.
 - Failed to separate the concerns of building chessboard mobs from the general mob data service.  This is the same failure that happened with room data.
 	- Adequately separted the data after guidance, but failed to make the chessboard builder cohesive and left it in two separate folders.
+- Excelled at setting up two panes for two connections on the test page
+- Adequately added players to the room description and randomized test player names.
+- Architectural failure when I asked to serialize all player commands.  It added the serialization logic to the Player class instead of the command processor and serialized them per-player instead of across the app.
+	- It created a simple semaphore-based queue after guidance, we'll see how that works out.
+- Adequately filtered out the current player self-description from room presentation.
+- Failed to separate the idea of players in a room from player connections and implemented lookup of players in a room via signalR.
+	- Separated the player data service after guidance but used a bizarre IDictionary<Player,byte> with a byte value of 0 for all players.  Presumably because there is no player ID currently.
+	- Adequately resolved this issue after guidance.
+- Excelled at creating shortcut handlers for north, south, east, west.  Adequately separated move logic from the handlers and reused it across handlers.
+

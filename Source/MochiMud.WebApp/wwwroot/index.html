@@ -8,7 +8,6 @@
         body {
             font-family: system-ui, sans-serif;
             margin: 2rem;
-            max-width: 40rem;
         }
 
         button,
@@ -16,12 +15,41 @@
             font: inherit;
         }
 
-        #status {
+        .players {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+        }
+
+        .player {
+            border: 1px solid #ccc;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+        }
+
+        .command-form {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .command-form label {
+            align-self: center;
+        }
+
+        .command-input {
+            box-sizing: border-box;
+            flex: 1;
+            width: 100%;
+        }
+
+        .status {
             margin-top: 1rem;
             white-space: pre-line;
         }
 
-        #output {
+        .output {
             box-sizing: border-box;
             display: block;
             height: 28rem;
@@ -39,115 +67,149 @@
 </head>
 <body>
     <h1>MochiMUD SignalR Test</h1>
-    <p>Connect to the MudHub and send a test command to the server.</p>
+    <p>Connect two players to the MudHub and send commands independently.</p>
 
-    <form id="commandForm">
-        <label for="commandInput">Command</label>
-        <input id="commandInput" type="text" value="look" autocomplete="off">
-        <button id="sendButton" type="submit" disabled>Send Command</button>
-    </form>
+    <div class="players">
+        <section class="player" data-player="1">
+            <h2>Player 1</h2>
+            <div class="status">Connecting...</div>
+            <div class="output" role="log" aria-label="Player 1 server output"></div>
 
-    <div id="status">Connecting...</div>
-    <div id="output" role="log" aria-label="Server output"></div>
+            <form class="command-form">
+                <label for="commandInput1">Command</label>
+                <input id="commandInput1" class="command-input" type="text" value="look" autocomplete="off">
+                <button class="send-button" type="submit" disabled>Send Command</button>
+            </form>
+        </section>
+
+        <section class="player" data-player="2">
+            <h2>Player 2</h2>
+            <div class="status">Connecting...</div>
+            <div class="output" role="log" aria-label="Player 2 server output"></div>
+
+            <form class="command-form">
+                <label for="commandInput2">Command</label>
+                <input id="commandInput2" class="command-input" type="text" value="look" autocomplete="off">
+                <button class="send-button" type="submit" disabled>Send Command</button>
+            </form>
+        </section>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@microsoft/signalr@latest/dist/browser/signalr.min.js"></script>
     <script>
-        const status = document.getElementById("status");
-        const output = document.getElementById("output");
-        const form = document.getElementById("commandForm");
-        const input = document.getElementById("commandInput");
-        const sendButton = document.getElementById("sendButton");
         const maxCommandHistoryLength = 50;
-        const commandHistory = [];
-        let commandHistoryIndex = -1;
 
-        const connection = new signalR.HubConnectionBuilder()
-            .withUrl("/mudHub")
-            .withAutomaticReconnect()
-            .build();
+        function createPlayerClient(playerElement) {
+            const status = playerElement.querySelector(".status");
+            const output = playerElement.querySelector(".output");
+            const form = playerElement.querySelector(".command-form");
+            const input = playerElement.querySelector(".command-input");
+            const sendButton = playerElement.querySelector(".send-button");
+            const commandHistory = [];
+            let commandHistoryIndex = -1;
 
-        connection.on("ReceiveMessage", (message) => {
-            appendOutput(message);
-        });
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/mudHub")
+                .withAutomaticReconnect()
+                .build();
 
-        function appendOutput(message) {
-            const messageElement = document.createElement("div");
-            messageElement.className = "output-message";
-            messageElement.textContent = message;
+            connection.on("ReceiveMessage", (message) => {
+                appendOutput(message);
+            });
 
-            output.appendChild(messageElement);
-            output.scrollTop = output.scrollHeight;
-        }
+            function appendOutput(message) {
+                const messageElement = document.createElement("div");
+                messageElement.className = "output-message";
+                messageElement.textContent = message;
 
-        async function start() {
-            try {
-                input.focus();
-                await connection.start();
-                sendButton.disabled = false;
-                status.textContent = "Connected. Sending test command...";
+                output.appendChild(messageElement);
+                output.scrollTop = output.scrollHeight;
+            }
+
+            async function start() {
+                try {
+                    await connection.start();
+                    sendButton.disabled = false;
+                    status.textContent = "Connected. Sending test command...";
+                    await sendCommand(input.value);
+                } catch (error) {
+                    status.textContent = `Connection failed: ${error}`;
+                }
+            }
+
+            async function sendCommand(commandText) {
+                const command = commandText.trim();
+
+                if (!command) {
+                    status.textContent = "Enter a command before sending.";
+                    return;
+                }
+
+                try {
+                    await connection.invoke("SendCommand", command);
+                    recordCommand(command);
+                    input.value = "";
+                    input.focus();
+                    status.textContent = `Sent command: ${command}`;
+                } catch (error) {
+                    status.textContent = `Send failed: ${error}`;
+                }
+            }
+
+            function recordCommand(command) {
+                commandHistory.push(command);
+
+                if (commandHistory.length > maxCommandHistoryLength) {
+                    commandHistory.shift();
+                }
+
+                commandHistoryIndex = -1;
+            }
+
+            function recallPreviousCommand() {
+                if (!commandHistory.length) {
+                    return;
+                }
+
+                if (commandHistoryIndex < commandHistory.length - 1) {
+                    commandHistoryIndex++;
+                }
+
+                input.value = commandHistory[commandHistory.length - 1 - commandHistoryIndex];
+                input.setSelectionRange(input.value.length, input.value.length);
+            }
+
+            form.addEventListener("submit", async (event) => {
+                event.preventDefault();
                 await sendCommand(input.value);
-            } catch (error) {
-                status.textContent = `Connection failed: ${error}`;
-            }
+            });
+
+            input.addEventListener("keydown", (event) => {
+                if (event.key !== "ArrowUp") {
+                    return;
+                }
+
+                event.preventDefault();
+                recallPreviousCommand();
+            });
+
+            return {
+                input,
+                start
+            };
         }
 
-        async function sendCommand(commandText) {
-            const command = commandText.trim();
+        const playerClients = Array
+            .from(document.querySelectorAll(".player"))
+            .map(createPlayerClient);
 
-            if (!command) {
-                status.textContent = "Enter a command before sending.";
-                return;
-            }
+        playerClients[0].input.focus();
 
-            try {
-                await connection.invoke("SendCommand", command);
-                recordCommand(command);
-                input.value = "";
-                input.focus();
-                status.textContent = `Sent command: ${command}`;
-            } catch (error) {
-                status.textContent = `Send failed: ${error}`;
-            }
-        }
-
-        function recordCommand(command) {
-            commandHistory.push(command);
-
-            if (commandHistory.length > maxCommandHistoryLength) {
-                commandHistory.shift();
-            }
-
-            commandHistoryIndex = -1;
-        }
-
-        function recallPreviousCommand() {
-            if (!commandHistory.length) {
-                return;
-            }
-
-            if (commandHistoryIndex < commandHistory.length - 1) {
-                commandHistoryIndex++;
-            }
-
-            input.value = commandHistory[commandHistory.length - 1 - commandHistoryIndex];
-            input.setSelectionRange(input.value.length, input.value.length);
-        }
-
-        form.addEventListener("submit", async (event) => {
-            event.preventDefault();
-            await sendCommand(input.value);
-        });
-
-        input.addEventListener("keydown", (event) => {
-            if (event.key !== "ArrowUp") {
-                return;
-            }
-
-            event.preventDefault();
-            recallPreviousCommand();
-        });
-
-        start();
+        Promise
+            .all(playerClients.map((playerClient) => playerClient.start()))
+            .then(() => {
+                playerClients[0].input.focus();
+            });
     </script>
 </body>
 </html>

@@ -20,6 +20,23 @@ namespace MochiMud.WebApp.Hubs
             this.playerDataService = playerDataService;
         }
 
+        public async Task SendToPlayersAsync(
+            IEnumerable<Player> players,
+            string message,
+            CancellationToken cancellationToken = default)
+        {
+            var connectionIds = playerConnectionRegistry.GetConnectionIdsForPlayers(players);
+
+            if (connectionIds.Count == 0)
+            {
+                return;
+            }
+
+            await hubContext.Clients
+                .Clients(connectionIds)
+                .SendAsync("ReceiveHtmlMessage", HtmlMessageFormatter.FormatTextMessage(message), cancellationToken);
+        }
+
         public async Task SendToPlayersInRoomExceptAsync(
             Guid roomId,
             Player excludedPlayer,
@@ -29,14 +46,7 @@ namespace MochiMud.WebApp.Hubs
             var players = playerDataService
                 .GetPlayersInRoom(roomId)
                 .Where(player => !ReferenceEquals(player, excludedPlayer));
-            var connectionIds = playerConnectionRegistry.GetConnectionIdsForPlayers(players);
-
-            if (connectionIds.Count == 0)
-            {
-                return;
-            }
-
-            await hubContext.Clients.Clients(connectionIds).SendAsync("ReceiveMessage", message, cancellationToken);
+            await SendToPlayersAsync(players, message, cancellationToken);
         }
     }
 }

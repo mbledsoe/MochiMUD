@@ -1,42 +1,41 @@
 using Microsoft.AspNetCore.SignalR;
 using MochiMud.WebApp.Commands;
+using MochiMud.WebApp.Game;
 using MochiMud.WebApp.Players;
 
 namespace MochiMud.WebApp.Hubs
 {
     public class MudHub : Hub
     {
-        private const string FakePlayerNamePrefix = "Test Player";
-
         private readonly CommandExecutionQueue commandExecutionQueue;
+        private readonly GameStateService gameStateService;
         private readonly IHubContext<MudHub> hubContext;
         private readonly ILogger<MudHub> logger;
         private readonly PlayerConnectionRegistry playerConnectionRegistry;
-        private readonly IPlayerDataService playerDataService;
 
         public MudHub(
             CommandExecutionQueue commandExecutionQueue,
+            GameStateService gameStateService,
             IHubContext<MudHub> hubContext,
             ILogger<MudHub> logger,
-            PlayerConnectionRegistry playerConnectionRegistry,
-            IPlayerDataService playerDataService)
+            PlayerConnectionRegistry playerConnectionRegistry)
         {
             this.commandExecutionQueue = commandExecutionQueue;
+            this.gameStateService = gameStateService;
             this.hubContext = hubContext;
             this.logger = logger;
             this.playerConnectionRegistry = playerConnectionRegistry;
-            this.playerDataService = playerDataService;
         }
 
         public override async Task OnConnectedAsync()
         {
-            var player = new Player($"{FakePlayerNamePrefix} {Random.Shared.Next(0, 10000):0000}");
+            var client = new SignalRCommandClient(hubContext, Context.ConnectionId);
+            var player = await gameStateService.AddPlayerToGameAsync(client, Context.ConnectionAborted);
 
-            playerDataService.Add(player);
             playerConnectionRegistry.AddOrUpdate(Context.ConnectionId, player);
 
             logger.LogInformation(
-                "Created player {PlayerName} for connection {ConnectionId}.",
+                "Associated player {PlayerName} with connection {ConnectionId}.",
                 player.Name,
                 Context.ConnectionId);
 
@@ -47,7 +46,7 @@ namespace MochiMud.WebApp.Hubs
         {
             if (playerConnectionRegistry.TryRemovePlayer(Context.ConnectionId, out var player) && player is not null)
             {
-                playerDataService.Remove(player);
+                gameStateService.RemovePlayerFromGame(player);
             }
 
             logger.LogInformation("Removed player for connection {ConnectionId}.", Context.ConnectionId);

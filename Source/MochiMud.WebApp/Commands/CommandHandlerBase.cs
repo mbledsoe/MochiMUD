@@ -6,6 +6,8 @@ namespace MochiMud.WebApp.Commands
     {
         public virtual bool CanExecuteInFight => false;
 
+        public virtual bool CanExecuteWhenDead => false;
+
         public abstract string CommandName { get; }
 
         public abstract Task HandleAsync(

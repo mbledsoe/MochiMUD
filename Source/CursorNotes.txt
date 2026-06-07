@@ -47,6 +47,19 @@
 			- Adequately converted it to draining all commands per iteration snapshot.
 - Adequately added command name shortcuts
 - Adequately separated Program.cs DI registrations into logical units
+- Adequately created BareHandDamage and updated FightService
+- Failed to use abstracted Character object to handle damage calculation during fight update which created duplication in code.
+	- Adequately refactored to remove duplication after specific guidance was given.
+- Adequately added HTML formatting and color coding, but added all formatting directly in SignalRClient class.  This could lead to a huge class with formatting for all messages.
+- Adequately added a default "look" command on SignalR connect but failed (again) to process that SignalR is only one client type.
+	- When given guidance to separate concerns, created "PlayerEntryService" instead of creating a higher level abstraction at the game level.
+	- Adequately fixed this issue after being given specific guidance.
+- Excelled in refactoring the IsInFight flag to be a state enum called CharacterState with multiple states.
+- When I asked it to block commands based on Dead state, it did not identify any abstraction and added a new policy specific to dead state.  I'm leaving it for now.
+- Adequately added a grouping mechanism but failed to recognize that it allows players to issue move commands while in a state that should not be allowed.
+	- Corrected issue with guidance
+
+
 		
 	
 

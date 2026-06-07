@@ -1,4 +1,6 @@
-namespace MochiMud.WebApp.Combat
+using MochiMud.WebApp.Combat;
+
+namespace MochiMud.WebApp.Characters
 {
     public class Weapon
     {

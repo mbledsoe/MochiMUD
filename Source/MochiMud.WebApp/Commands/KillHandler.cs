@@ -59,7 +59,7 @@ namespace MochiMud.WebApp.Commands
                     $"{player.Name} attacked the {mob.Name}",
                     cancellationToken);
 
-                fightService.StartFight(player, mob, client);
+                fightService.StartFight(player, mob);
             }
             catch
             {

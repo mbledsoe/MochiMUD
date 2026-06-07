@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.SignalR;
+using MochiMud.WebApp.Characters;
 using MochiMud.WebApp.Commands;
 using MochiMud.WebApp.Mobs;
 using MochiMud.WebApp.Players;
 using MochiMud.WebApp.World;
+using System.Text;
 
 namespace MochiMud.WebApp.Hubs
 {
@@ -19,7 +21,9 @@ namespace MochiMud.WebApp.Hubs
 
         public async Task SendMessageAsync(string message, CancellationToken cancellationToken = default)
         {
-            await hubContext.Clients.Client(connectionId).SendAsync("ReceiveMessage", message, cancellationToken);
+            await hubContext.Clients
+                .Client(connectionId)
+                .SendAsync("ReceiveHtmlMessage", HtmlMessageFormatter.FormatTextMessage(message), cancellationToken);
         }
 
         public async Task SendRoomAsync(
@@ -28,21 +32,51 @@ namespace MochiMud.WebApp.Hubs
             IReadOnlyCollection<Player> players,
             CancellationToken cancellationToken = default)
         {
-            var message = $"{room.Title}{Environment.NewLine}{room.Description}";
+            var message = new StringBuilder();
+
+            message.AppendLine("<div class=\"room\">");
+            message.AppendLine($"<div class=\"room-title\">{HtmlMessageFormatter.HtmlEncode(room.Title)}</div>");
+            message.AppendLine($"<div class=\"room-description\">{HtmlMessageFormatter.HtmlEncode(room.Description)}</div>");
 
             if (mobs.Count > 0)
             {
-                var mobText = string.Join(Environment.NewLine, mobs.Select(mob => $"The {mob.Name} is standing here."));
-                message = $"{message}{Environment.NewLine}{mobText}";
+                message.AppendLine("<div class=\"room-section room-mobs\">");
+
+                foreach (var mob in mobs)
+                {
+                    message.AppendLine($"<div class=\"room-mob\">The {HtmlMessageFormatter.HtmlEncode(mob.Name)} is standing here.</div>");
+                }
+
+                message.AppendLine("</div>");
             }
 
             if (players.Count > 0)
             {
-                var playerText = string.Join(Environment.NewLine, players.Select(player => $"{player.Name} is standing here."));
-                message = $"{message}{Environment.NewLine}{playerText}";
+                message.AppendLine("<div class=\"room-section room-players\">");
+
+                foreach (var player in players)
+                {
+                    message.AppendLine($"<div class=\"room-player\">{FormatPlayerRoomText(player)}</div>");
+                }
+
+                message.AppendLine("</div>");
             }
 
-            await SendMessageAsync(message, cancellationToken);
+            message.AppendLine("</div>");
+
+            await hubContext.Clients.Client(connectionId).SendAsync("ReceiveHtmlMessage", message.ToString(), cancellationToken);
+        }
+
+        private static string FormatPlayerRoomText(Player player)
+        {
+            var playerName = HtmlMessageFormatter.HtmlEncode(player.Name);
+
+            return player.State switch
+            {
+                CharacterState.Fighting => $"{playerName} is fighting for his life!",
+                CharacterState.Dead => $"The corpse of {playerName} is laying on the ground",
+                _ => $"{playerName} is standing here."
+            };
         }
     }
 }

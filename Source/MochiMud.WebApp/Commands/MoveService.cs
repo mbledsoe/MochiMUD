@@ -1,3 +1,4 @@
+using MochiMud.WebApp.Characters;
 using MochiMud.WebApp.Players;
 using MochiMud.WebApp.World;
 
@@ -7,17 +8,20 @@ namespace MochiMud.WebApp.Commands
     {
         private readonly ICommandNotificationService commandNotificationService;
         private readonly ILogger<MoveService> logger;
+        private readonly PlayerGroupService playerGroupService;
         private readonly RoomPresenter roomPresenter;
         private readonly IWorldDataService worldDataService;
 
         public MoveService(
             ICommandNotificationService commandNotificationService,
             ILogger<MoveService> logger,
+            PlayerGroupService playerGroupService,
             RoomPresenter roomPresenter,
             IWorldDataService worldDataService)
         {
             this.commandNotificationService = commandNotificationService;
             this.logger = logger;
+            this.playerGroupService = playerGroupService;
             this.roomPresenter = roomPresenter;
             this.worldDataService = worldDataService;
         }
@@ -28,6 +32,12 @@ namespace MochiMud.WebApp.Commands
             Player player,
             CancellationToken cancellationToken = default)
         {
+            if (!CanMove(player))
+            {
+                await client.SendMessageAsync("You cannot move right now.", cancellationToken);
+                return;
+            }
+
             var currentRoom = await worldDataService.GetRoomAsync(player.CurrentRoomId, cancellationToken);
 
             if (currentRoom is null)
@@ -54,15 +64,35 @@ namespace MochiMud.WebApp.Commands
                 return;
             }
 
+            var followers = playerGroupService
+                .GetFollowers(player)
+                .Where(follower => follower.CurrentRoomId == currentRoom.Id && CanMove(follower))
+                .ToArray();
+
+            player.CurrentRoomId = exit.DestinationRoomId;
+
+            foreach (var follower in followers)
+            {
+                follower.CurrentRoomId = exit.DestinationRoomId;
+            }
+
             await commandNotificationService.SendToPlayersInRoomExceptAsync(
                 currentRoom.Id,
                 player,
                 $"{player.Name} left {direction}.",
                 cancellationToken);
 
-            player.CurrentRoomId = exit.DestinationRoomId;
+            await commandNotificationService.SendToPlayersAsync(
+                followers,
+                $"You follow {player.Name} {direction}.",
+                cancellationToken);
 
             await roomPresenter.TrySendRoomAsync(player.CurrentRoomId, client, player, cancellationToken);
+        }
+
+        private static bool CanMove(Player player)
+        {
+            return player.State == CharacterState.Standing;
         }
     }
 }

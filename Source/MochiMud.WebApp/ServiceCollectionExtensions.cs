@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MochiMud.WebApp.Commands;
+using MochiMud.WebApp.Game;
 using MochiMud.WebApp.GameLoop;
 using MochiMud.WebApp.Hubs;
 using MochiMud.WebApp.Mobs;
@@ -20,9 +21,11 @@ namespace MochiMud.WebApp
             services.AddSingleton<MoveService>();
             services.AddSingleton<RoomPresenter>();
             services.AddSingleton<ICommandHandler, FleeHandler>();
+            services.AddSingleton<ICommandHandler, FollowHandler>();
             services.AddSingleton<ICommandHandler, KillHandler>();
             services.AddSingleton<ICommandHandler, LookHandler>();
             services.AddSingleton<ICommandHandler, MoveHandler>();
+            services.AddSingleton<ICommandHandler, ReviveHandler>();
 
             services.AddDirectionCommand("north", Direction.North);
             services.AddDirectionCommand("south", Direction.South);
@@ -32,8 +35,9 @@ namespace MochiMud.WebApp
             return services;
         }
 
-        public static IServiceCollection AddMudGameLoopServices(this IServiceCollection services)
+        public static IServiceCollection AddMudGameServices(this IServiceCollection services)
         {
+            services.AddSingleton<GameStateService>();
             services.AddHostedService<GameLoopService>();
 
             return services;
@@ -50,6 +54,7 @@ namespace MochiMud.WebApp
         {
             services.AddSingleton<IPlayerDataService, PlayerDataService>();
             services.AddSingleton<PlayerConnectionRegistry>();
+            services.AddSingleton<PlayerGroupService>();
 
             return services;
         }

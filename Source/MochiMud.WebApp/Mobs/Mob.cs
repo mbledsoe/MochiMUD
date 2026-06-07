@@ -1,9 +1,9 @@
-using MochiMud.WebApp.Combat;
+using MochiMud.WebApp.Characters;
 using MochiMud.WebApp.World;
 
 namespace MochiMud.WebApp.Mobs
 {
-    public class Mob
+    public class Mob : Character
     {
         public Mob(string name)
             : this(name, WorldConstants.DefaultStartRoomId)
@@ -11,19 +11,11 @@ namespace MochiMud.WebApp.Mobs
         }
 
         public Mob(string name, Guid currentRoomId)
+            : base(name)
         {
-            Name = name;
             CurrentRoomId = currentRoomId;
-            HitPoints = 50;
-            Weapon = new Weapon("A rusty epee", new DamageDiceSpecification(1, 6));
         }
 
-        public string Name { get; }
-
         public Guid CurrentRoomId { get; set; }
-
-        public int HitPoints { get; set; }
-
-        public Weapon Weapon { get; }
     }
 }

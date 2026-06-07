@@ -1,3 +1,4 @@
+using MochiMud.WebApp.Characters;
 using MochiMud.WebApp.Players;
 using MochiMud.WebApp.World;
 
@@ -30,7 +31,7 @@ namespace MochiMud.WebApp.Commands
         {
             logger.LogInformation("Handling flee command: {Command}", command);
 
-            if (!player.IsInFight)
+            if (player.State != CharacterState.Fighting)
             {
                 await client.SendMessageAsync("But you're not fighting anyone!", cancellationToken);
                 return;

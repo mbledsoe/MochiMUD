@@ -6,6 +6,8 @@ namespace MochiMud.WebApp.Commands
     {
         bool CanExecuteInFight { get; }
 
+        bool CanExecuteWhenDead { get; }
+
         string CommandName { get; }
 
         Task HandleAsync(string command, ICommandClient client, Player player, CancellationToken cancellationToken = default);

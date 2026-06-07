@@ -1,3 +1,4 @@
+using MochiMud.WebApp.Characters;
 using MochiMud.WebApp.Players;
 
 namespace MochiMud.WebApp.Commands
@@ -24,9 +25,15 @@ namespace MochiMud.WebApp.Commands
                 return;
             }
 
-            if (player.IsInFight && !commandHandler.CanExecuteInFight)
+            if (player.State == CharacterState.Fighting && !commandHandler.CanExecuteInFight)
             {
                 await client.SendMessageAsync("You cannot do that while you are in a fight.", cancellationToken);
+                return;
+            }
+
+            if (player.State == CharacterState.Dead && !commandHandler.CanExecuteWhenDead)
+            {
+                await client.SendMessageAsync("You cannot do that while you are dead.", cancellationToken);
                 return;
             }
 

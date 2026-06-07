@@ -63,6 +63,41 @@
         .output-message + .output-message {
             margin-top: 1rem;
         }
+
+        .message {
+            color: #222;
+        }
+
+        .message-text {
+            color: #4b4b4b;
+        }
+
+        .room {
+            display: grid;
+            gap: 0.35rem;
+        }
+
+        .room-title {
+            color: #265d97;
+            font-weight: 700;
+        }
+
+        .room-description {
+            color: #333;
+        }
+
+        .room-section {
+            display: grid;
+            gap: 0.25rem;
+        }
+
+        .room-mob {
+            color: #8a3b12;
+        }
+
+        .room-player {
+            color: #357a38;
+        }
     </style>
 </head>
 <body>
@@ -77,7 +112,7 @@
 
             <form class="command-form">
                 <label for="commandInput1">Command</label>
-                <input id="commandInput1" class="command-input" type="text" value="look" autocomplete="off">
+                <input id="commandInput1" class="command-input" type="text" autocomplete="off">
                 <button class="send-button" type="submit" disabled>Send Command</button>
             </form>
         </section>
@@ -89,7 +124,7 @@
 
             <form class="command-form">
                 <label for="commandInput2">Command</label>
-                <input id="commandInput2" class="command-input" type="text" value="look" autocomplete="off">
+                <input id="commandInput2" class="command-input" type="text" autocomplete="off">
                 <button class="send-button" type="submit" disabled>Send Command</button>
             </form>
         </section>
@@ -113,14 +148,14 @@
                 .withAutomaticReconnect()
                 .build();
 
-            connection.on("ReceiveMessage", (message) => {
-                appendOutput(message);
+            connection.on("ReceiveHtmlMessage", (message) => {
+                appendHtmlOutput(message);
             });
 
-            function appendOutput(message) {
+            function appendHtmlOutput(message) {
                 const messageElement = document.createElement("div");
                 messageElement.className = "output-message";
-                messageElement.textContent = message;
+                messageElement.innerHTML = message;
 
                 output.appendChild(messageElement);
                 output.scrollTop = output.scrollHeight;
@@ -130,8 +165,7 @@
                 try {
                     await connection.start();
                     sendButton.disabled = false;
-                    status.textContent = "Connected. Sending test command...";
-                    await sendCommand(input.value);
+                    status.textContent = "Connected.";
                 } catch (error) {
                     status.textContent = `Connection failed: ${error}`;
                 }
@@ -150,7 +184,6 @@
                     recordCommand(command);
                     input.value = "";
                     input.focus();
-                    status.textContent = `Sent command: ${command}`;
                 } catch (error) {
                     status.textContent = `Send failed: ${error}`;
                 }

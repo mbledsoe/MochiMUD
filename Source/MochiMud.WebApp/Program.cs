@@ -9,7 +9,7 @@ namespace MochiMud.WebApp
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddMudCommandServices();
-            builder.Services.AddMudGameLoopServices();
+            builder.Services.AddMudGameServices();
             builder.Services.AddMudMobServices();
             builder.Services.AddMudPlayerServices();
             builder.Services.AddMudRealtimeServices();

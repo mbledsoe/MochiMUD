@@ -1,3 +1,4 @@
+using MochiMud.WebApp.Combat;
 using MochiMud.WebApp.World;
 
 namespace MochiMud.WebApp.Mobs
@@ -12,10 +13,12 @@ namespace MochiMud.WebApp.Mobs
 
             foreach (var file in Files)
             {
-                mobs.Add(CreateMob($"White {GetBackRankPiece(file)}", file, 1));
+                var backRankPiece = GetBackRankPiece(file);
+
+                mobs.Add(CreateMob($"White {backRankPiece}", file, 1));
                 mobs.Add(CreateMob("White Pawn", file, 2));
                 mobs.Add(CreateMob("Black Pawn", file, 7));
-                mobs.Add(CreateMob($"Black {GetBackRankPiece(file)}", file, 8));
+                mobs.Add(CreateMob($"Black {backRankPiece}", file, 8));
             }
 
             return mobs;
@@ -23,7 +26,18 @@ namespace MochiMud.WebApp.Mobs
 
         private static Mob CreateMob(string name, char file, int rank)
         {
-            return new Mob(name, ChessboardWorldBuilder.GetRoomId(file, rank));
+            var mob = new Mob(name, ChessboardWorldBuilder.GetRoomId(file, rank));
+
+            if (name.EndsWith("King", StringComparison.Ordinal))
+            {
+                mob.BareHandDamage = new DamageDiceSpecification(5, 5);
+            }
+            else if (name.EndsWith("Queen", StringComparison.Ordinal))
+            {
+                mob.BareHandDamage = new DamageDiceSpecification(5, 50);
+            }
+
+            return mob;
         }
 
         private static string GetBackRankPiece(char file)

@@ -43,7 +43,7 @@
 
     <form id="commandForm">
         <label for="commandInput">Command</label>
-        <input id="commandInput" type="text" value="look">
+        <input id="commandInput" type="text" value="look" autocomplete="off">
         <button id="sendButton" type="submit" disabled>Send Command</button>
     </form>
 
@@ -57,6 +57,9 @@
         const form = document.getElementById("commandForm");
         const input = document.getElementById("commandInput");
         const sendButton = document.getElementById("sendButton");
+        const maxCommandHistoryLength = 50;
+        const commandHistory = [];
+        let commandHistoryIndex = -1;
 
         const connection = new signalR.HubConnectionBuilder()
             .withUrl("/mudHub")
@@ -78,6 +81,7 @@
 
         async function start() {
             try {
+                input.focus();
                 await connection.start();
                 sendButton.disabled = false;
                 status.textContent = "Connected. Sending test command...";
@@ -97,15 +101,50 @@
 
             try {
                 await connection.invoke("SendCommand", command);
+                recordCommand(command);
+                input.value = "";
+                input.focus();
                 status.textContent = `Sent command: ${command}`;
             } catch (error) {
                 status.textContent = `Send failed: ${error}`;
             }
         }
 
+        function recordCommand(command) {
+            commandHistory.push(command);
+
+            if (commandHistory.length > maxCommandHistoryLength) {
+                commandHistory.shift();
+            }
+
+            commandHistoryIndex = -1;
+        }
+
+        function recallPreviousCommand() {
+            if (!commandHistory.length) {
+                return;
+            }
+
+            if (commandHistoryIndex < commandHistory.length - 1) {
+                commandHistoryIndex++;
+            }
+
+            input.value = commandHistory[commandHistory.length - 1 - commandHistoryIndex];
+            input.setSelectionRange(input.value.length, input.value.length);
+        }
+
         form.addEventListener("submit", async (event) => {
             event.preventDefault();
             await sendCommand(input.value);
+        });
+
+        input.addEventListener("keydown", (event) => {
+            if (event.key !== "ArrowUp") {
+                return;
+            }
+
+            event.preventDefault();
+            recallPreviousCommand();
         });
 
         start();

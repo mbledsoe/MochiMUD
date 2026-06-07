@@ -1,3 +1,4 @@
+using MochiMud.WebApp.Mobs;
 using MochiMud.WebApp.World;
 
 namespace MochiMud.WebApp.Commands
@@ -6,6 +7,6 @@ namespace MochiMud.WebApp.Commands
     {
         Task SendMessageAsync(string message, CancellationToken cancellationToken = default);
 
-        Task SendRoomAsync(Room room, CancellationToken cancellationToken = default);
+        Task SendRoomAsync(Room room, IReadOnlyCollection<Mob> mobs, CancellationToken cancellationToken = default);
     }
 }

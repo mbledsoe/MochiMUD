@@ -1,3 +1,5 @@
+using MochiMud.WebApp.Players;
+
 namespace MochiMud.WebApp.Commands
 {
     public class CommandProcessor
@@ -7,13 +9,14 @@ namespace MochiMud.WebApp.Commands
 
         public CommandProcessor(IEnumerable<ICommandHandler> commandHandlers, ILogger<CommandProcessor> logger)
         {
+
             this.commandHandlers = commandHandlers.ToDictionary(
                 commandHandler => commandHandler.CommandName,
                 StringComparer.OrdinalIgnoreCase);
             this.logger = logger;
         }
 
-        public async Task ProcessAsync(string command, ICommandClient client, CancellationToken cancellationToken = default)
+        public async Task ProcessAsync(string command, ICommandClient client, Player player, CancellationToken cancellationToken = default)
         {
             var commandName = GetCommandName(command);
 
@@ -29,7 +32,7 @@ namespace MochiMud.WebApp.Commands
                 return;
             }
 
-            await commandHandler.HandleAsync(command, client, cancellationToken);
+            await commandHandler.HandleAsync(command, client, player, cancellationToken);
         }
 
         private static string? GetCommandName(string command)

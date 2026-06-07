@@ -1,34 +1,30 @@
-using MochiMud.WebApp.World;
+using MochiMud.WebApp.Players;
 
 namespace MochiMud.WebApp.Commands
 {
     public class LookHandler : ICommandHandler
     {
         private readonly ILogger<LookHandler> logger;
-        private readonly IWorldDataService worldDataService;
+        private readonly RoomPresenter roomPresenter;
 
-        public LookHandler(ILogger<LookHandler> logger, IWorldDataService worldDataService)
+        public LookHandler(ILogger<LookHandler> logger, RoomPresenter roomPresenter)
         {
             this.logger = logger;
-            this.worldDataService = worldDataService;
+            this.roomPresenter = roomPresenter;
         }
 
         public string CommandName => "look";
 
-        public async Task HandleAsync(string command, ICommandClient client, CancellationToken cancellationToken = default)
+        public async Task HandleAsync(string command, ICommandClient client, Player player, CancellationToken cancellationToken = default)
         {
             logger.LogInformation("Handling look command: {Command}", command);
 
-            var room = await worldDataService.GetRoomAsync(WorldConstants.DefaultStartRoomId, cancellationToken);
+            var roomWasSent = await roomPresenter.TrySendRoomAsync(player.CurrentRoomId, client, cancellationToken);
 
-            if (room is null)
+            if (!roomWasSent)
             {
-                logger.LogWarning("Room not found: {RoomId}", WorldConstants.DefaultStartRoomId);
                 await client.SendMessageAsync("You see nothing special.", cancellationToken);
-                return;
             }
-
-            await client.SendRoomAsync(room, cancellationToken);
         }
     }
 }

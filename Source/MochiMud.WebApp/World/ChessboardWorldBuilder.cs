@@ -35,26 +35,23 @@ namespace MochiMud.WebApp.World
         private static string GetDescription(char file, int rank)
         {
             var squareColor = GetSquareColor(file, rank);
-            var piece = GetStartingPiece(file, rank);
 
-            return piece is null
-                ? $"This is a {squareColor} square."
-                : $"A {piece} is on this {squareColor} square.";
+            return $"This is a {squareColor} square.";
         }
 
         private static IReadOnlyCollection<Exit> GetExits(char file, int rank)
         {
             var exits = new List<Exit>();
 
-            AddExit(exits, "north", file, rank + 1);
-            AddExit(exits, "south", file, rank - 1);
-            AddExit(exits, "east", (char)(file + 1), rank);
-            AddExit(exits, "west", (char)(file - 1), rank);
+            AddExit(exits, Direction.North, file, rank + 1);
+            AddExit(exits, Direction.South, file, rank - 1);
+            AddExit(exits, Direction.East, (char)(file + 1), rank);
+            AddExit(exits, Direction.West, (char)(file - 1), rank);
 
             return exits;
         }
 
-        private static void AddExit(List<Exit> exits, string direction, char file, int rank)
+        private static void AddExit(List<Exit> exits, Direction direction, char file, int rank)
         {
             if (!IsValidSquare(file, rank))
             {
@@ -78,32 +75,7 @@ namespace MochiMud.WebApp.World
                 : "dark";
         }
 
-        private static string? GetStartingPiece(char file, int rank)
-        {
-            return rank switch
-            {
-                1 => $"white {GetBackRankPiece(file)}",
-                2 => "white pawn",
-                7 => "black pawn",
-                8 => $"black {GetBackRankPiece(file)}",
-                _ => null
-            };
-        }
-
-        private static string GetBackRankPiece(char file)
-        {
-            return file switch
-            {
-                'A' or 'H' => "rook",
-                'B' or 'G' => "knight",
-                'C' or 'F' => "bishop",
-                'D' => "queen",
-                'E' => "king",
-                _ => throw new ArgumentOutOfRangeException(nameof(file), file, "Unknown chess file.")
-            };
-        }
-
-        private static Guid GetRoomId(char file, int rank)
+        public static Guid GetRoomId(char file, int rank)
         {
             if (file == 'E' && rank == 1)
             {

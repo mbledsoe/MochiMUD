@@ -9,3 +9,15 @@
 - Adequately converted the output on the index.html page to a list of divs.
 - Major archetectural failure when I asked it to generate a set of rooms reflected a chessboard.  Added a bunch of logic, including generating the data to the StaticWorldDataService
 	- It failed to separate the concerns of serving world data vs. generating a chessboard world.
+	- Adequately refactored into ChessworldBuilder after guidance.
+	- It failed to identify "direction" as an enum candidate.
+- Adequately handled adding the player current room ID lookup to LookHandler.
+- It added the MoveHandler but made a few blunders.
+	- Bizarrely allowed movement to a non-existent room including a message to the player saying they "moved to nowhere."
+	- It also did not attempt to abstract the idea of commands having names and parameters and embedded the parsing directly in the MoveCommandHandler.
+	- It fixed the "moved to nowhere" problem after guidance.
+- Adequately added command history, focus, and clearing to the input box.  Did not consider scope of variables such as commandHistoryIndex.
+- Duplicated mob look up and room data construction when I asked it to add Mobs and send list of mobs with room data.
+	- Its solution after guidance was somewhat unexpected.  It added a RoomPresenter instead of a common data builder.  I'm going to let it ride for now.
+- Failed to separate the concerns of building chessboard mobs from the general mob data service.  This is the same failure that happened with room data.
+	- Adequately separted the data after guidance, but failed to make the chessboard builder cohesive and left it in two separate folders.

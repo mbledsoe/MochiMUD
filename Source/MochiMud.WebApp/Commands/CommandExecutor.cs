@@ -22,6 +22,7 @@ namespace MochiMud.WebApp.Commands
 
             if (commandHandler is null)
             {
+                await client.SendMessageAsync("Sorry, I don't know that command.", cancellationToken);
                 return;
             }
 

@@ -68,6 +68,7 @@ create high-quality code with Cursor.
 
 6/8/2026
 - Adequately created a build pipeline for GitHub actions + Azure app service deployment.
+- Adequately created a help command.  Required guidance to exclude help from the command list.
 		
 	
 

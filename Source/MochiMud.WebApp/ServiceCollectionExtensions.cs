@@ -22,6 +22,7 @@ namespace MochiMud.WebApp
             services.AddSingleton<RoomPresenter>();
             services.AddSingleton<ICommandHandler, FleeHandler>();
             services.AddSingleton<ICommandHandler, FollowHandler>();
+            services.AddSingleton<ICommandHandler, HelpHandler>();
             services.AddSingleton<ICommandHandler, KillHandler>();
             services.AddSingleton<ICommandHandler, LookHandler>();
             services.AddSingleton<ICommandHandler, MoveHandler>();

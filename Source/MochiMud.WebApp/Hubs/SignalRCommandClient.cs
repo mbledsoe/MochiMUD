@@ -26,6 +26,13 @@ namespace MochiMud.WebApp.Hubs
                 .SendAsync("ReceiveHtmlMessage", HtmlMessageFormatter.FormatTextMessage(message), cancellationToken);
         }
 
+        public async Task SendBannerAsync(string banner, CancellationToken cancellationToken = default)
+        {
+            await hubContext.Clients
+                .Client(connectionId)
+                .SendAsync("ReceiveHtmlMessage", HtmlMessageFormatter.FormatBanner(banner), cancellationToken);
+        }
+
         public async Task SendRoomAsync(
             Room room,
             IReadOnlyCollection<Mob> mobs,

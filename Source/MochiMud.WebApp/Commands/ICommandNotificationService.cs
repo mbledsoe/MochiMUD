@@ -14,5 +14,9 @@ namespace MochiMud.WebApp.Commands
             Player excludedPlayer,
             string message,
             CancellationToken cancellationToken = default);
+
+        Task SendPlayerStatsUpdateAsync(
+            Player player,
+            CancellationToken cancellationToken = default);
     }
 }

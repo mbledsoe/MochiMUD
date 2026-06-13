@@ -8,6 +8,8 @@ namespace MochiMud.WebApp.Commands
     {
         Task SendMessageAsync(string message, CancellationToken cancellationToken = default);
 
+        Task SendBannerAsync(string banner, CancellationToken cancellationToken = default);
+
         Task SendRoomAsync(
             Room room,
             IReadOnlyCollection<Mob> mobs,

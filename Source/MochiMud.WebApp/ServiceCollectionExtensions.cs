@@ -77,6 +77,7 @@ namespace MochiMud.WebApp
         public static IServiceCollection AddMudGameServices(this IServiceCollection services)
         {
             services.AddSingleton<GameStateService>();
+            services.AddSingleton<WelcomeBannerProvider>();
             services.AddHostedService<GameLoopService>();
 
             return services;

@@ -137,42 +137,68 @@ namespace MochiMud.WebApp.Commands
 
         private async Task ProcessRoundAsync(ActiveFight activeFight, DateTimeOffset now, CancellationToken cancellationToken)
         {
-            foreach (var player in activeFight.GetActivePlayers())
+            var roundParticipants = activeFight.Participants.ToArray();
+
+            try
             {
-                var playerDamage = Attack(player, activeFight.Mob);
+                foreach (var player in activeFight.GetActivePlayers())
+                {
+                    var playerDamage = Attack(player, activeFight.Mob);
+
+                    await commandNotificationService.SendToPlayersAsync(
+                        [player],
+                        $"You attacked the {activeFight.Mob.Name} for {playerDamage} hitpoints",
+                        cancellationToken);
+
+                    if (activeFight.Mob.HitPoints <= 0)
+                    {
+                        await EndFightWithMobDeathAsync(activeFight, cancellationToken);
+                        return;
+                    }
+                }
+
+                var target = GetMobTarget(activeFight);
+                var mobDamage = Attack(activeFight.Mob, target);
 
                 await commandNotificationService.SendToPlayersAsync(
-                    [player],
-                    $"You attacked the {activeFight.Mob.Name} for {playerDamage} hitpoints",
+                    [target],
+                    $"The {activeFight.Mob.Name} attacked you for {mobDamage} hitpoints",
                     cancellationToken);
 
-                if (activeFight.Mob.HitPoints <= 0)
+                if (target.HitPoints <= 0)
                 {
-                    await EndFightWithMobDeathAsync(activeFight, cancellationToken);
+                    await EndFightWithPlayerDeathAsync(activeFight, target, cancellationToken);
+                }
+
+                if (activeFight.GetActivePlayers().Count == 0)
+                {
+                    EndFightWithAllPlayersDead(activeFight);
                     return;
                 }
+
+                activeFight.NextRoundAt = now.Add(RoundDelay);
             }
-
-            var target = GetMobTarget(activeFight);
-            var mobDamage = Attack(activeFight.Mob, target);
-
-            await commandNotificationService.SendToPlayersAsync(
-                [target],
-                $"The {activeFight.Mob.Name} attacked you for {mobDamage} hitpoints",
-                cancellationToken);
-
-            if (target.HitPoints <= 0)
+            finally
             {
-                await EndFightWithPlayerDeathAsync(activeFight, target, cancellationToken);
+                await SendPlayerStatsUpdatesAsync(roundParticipants, cancellationToken);
             }
+        }
 
-            if (activeFight.GetActivePlayers().Count == 0)
+        private async Task SendPlayerStatsUpdatesAsync(
+            IEnumerable<Player> players,
+            CancellationToken cancellationToken)
+        {
+            foreach (var player in players)
             {
-                EndFightWithAllPlayersDead(activeFight);
-                return;
+                try
+                {
+                    await commandNotificationService.SendPlayerStatsUpdateAsync(player, cancellationToken);
+                }
+                catch (Exception exception)
+                {
+                    logger.LogError(exception, "Failed to send player stats update for player {PlayerId}.", player.Id);
+                }
             }
-
-            activeFight.NextRoundAt = now.Add(RoundDelay);
         }
 
         private void EndFight(ActiveFight activeFight)

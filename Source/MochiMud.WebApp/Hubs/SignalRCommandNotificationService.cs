@@ -48,5 +48,23 @@ namespace MochiMud.WebApp.Hubs
                 .Where(player => !ReferenceEquals(player, excludedPlayer));
             await SendToPlayersAsync(players, message, cancellationToken);
         }
+
+        public async Task SendPlayerStatsUpdateAsync(
+            Player player,
+            CancellationToken cancellationToken = default)
+        {
+            var connectionIds = playerConnectionRegistry.GetConnectionIdsForPlayers([player]);
+
+            if (connectionIds.Count == 0)
+            {
+                return;
+            }
+
+            var update = new PlayerStatsUpdate(player.Id, player.HitPoints, player.MaximumHitPoints);
+
+            await hubContext.Clients
+                .Clients(connectionIds)
+                .SendAsync("ReceivePlayerStatsUpdate", update, cancellationToken);
+        }
     }
 }

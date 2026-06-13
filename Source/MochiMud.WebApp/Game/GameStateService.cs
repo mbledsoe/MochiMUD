@@ -8,20 +8,26 @@ namespace MochiMud.WebApp.Game
         private const string InitialCommand = "look";
 
         private readonly CommandExecutionQueue commandExecutionQueue;
+        private readonly ICommandNotificationService commandNotificationService;
         private readonly ILogger<GameStateService> logger;
         private readonly IPlayerDataService playerDataService;
         private readonly PlayerGroupService playerGroupService;
+        private readonly WelcomeBannerProvider welcomeBannerProvider;
 
         public GameStateService(
             CommandExecutionQueue commandExecutionQueue,
+            ICommandNotificationService commandNotificationService,
             ILogger<GameStateService> logger,
             IPlayerDataService playerDataService,
-            PlayerGroupService playerGroupService)
+            PlayerGroupService playerGroupService,
+            WelcomeBannerProvider welcomeBannerProvider)
         {
             this.commandExecutionQueue = commandExecutionQueue;
+            this.commandNotificationService = commandNotificationService;
             this.logger = logger;
             this.playerDataService = playerDataService;
             this.playerGroupService = playerGroupService;
+            this.welcomeBannerProvider = welcomeBannerProvider;
         }
 
         public async Task AddPlayerToGameAsync(Player player, ICommandClient client, CancellationToken cancellationToken = default)
@@ -29,6 +35,15 @@ namespace MochiMud.WebApp.Game
             playerDataService.Add(player);
 
             logger.LogInformation("Added player {PlayerName} to the game.", player.Name);
+
+            var banner = welcomeBannerProvider.GetBanner();
+
+            if (banner is not null)
+            {
+                await client.SendBannerAsync(banner, cancellationToken);
+            }
+
+            await commandNotificationService.SendPlayerStatsUpdateAsync(player, cancellationToken);
 
             await commandExecutionQueue.EnqueueAsync(new QueuedCommand(InitialCommand, client, player), cancellationToken);
         }

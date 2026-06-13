@@ -99,6 +99,10 @@ I generated a lot of very useful functionality today and made a log of progress 
 but it was mildly better and required less explicit guidance.  I was able to get a lot of CSS implemented to my satisfaction but I'm not spending any time reviewing that so I
 haven't evaluated the quality of what it has done there.  CSS with dynamic layouts is usually a source of grief for me so I appreciated being able to get something very functional
 with only high level prompts.
-		
+
+Next time: 
+	- Add class selection to character creation.
+	- Add level + xp to player data
+	- Add spell casting (for mage/cleric) and mana stats
 
 

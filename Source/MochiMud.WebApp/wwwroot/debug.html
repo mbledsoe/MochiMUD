@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>MochiMUD</title>
+    <title>MochiMUD SignalR Test</title>
     <style>
         body {
             font-family: system-ui, sans-serif;
@@ -40,11 +40,17 @@
             padding: 0.5rem 1rem;
         }
 
+        .players {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+        }
+
         .player {
+            border: 1px solid #ccc;
             display: flex;
             flex-direction: column;
-            margin-top: 1.5rem;
-            max-width: 48rem;
+            padding: 1rem;
         }
 
         .command-form {
@@ -122,22 +128,37 @@
 <body>
     <div class="header">
         <div>
-            <h1>MochiMUD</h1>
-            <p>Send commands to play.</p>
+            <h1>MochiMUD SignalR Test</h1>
+            <p>Connect two players to the MudHub and send commands independently.</p>
         </div>
         <button id="logoutButton" type="button">Log out</button>
     </div>
 
-    <section class="player">
-        <div class="status">Connecting...</div>
-        <div class="output" role="log" aria-label="Server output"></div>
+    <div class="players">
+        <section class="player" data-player="1">
+            <h2>Player 1</h2>
+            <div class="status">Connecting...</div>
+            <div class="output" role="log" aria-label="Player 1 server output"></div>
 
-        <form class="command-form">
-            <label for="commandInput">Command</label>
-            <input id="commandInput" class="command-input" type="text" autocomplete="off">
-            <button class="send-button" type="submit" disabled>Send Command</button>
-        </form>
-    </section>
+            <form class="command-form">
+                <label for="commandInput1">Command</label>
+                <input id="commandInput1" class="command-input" type="text" autocomplete="off">
+                <button class="send-button" type="submit" disabled>Send Command</button>
+            </form>
+        </section>
+
+        <section class="player" data-player="2">
+            <h2>Player 2</h2>
+            <div class="status">Connecting...</div>
+            <div class="output" role="log" aria-label="Player 2 server output"></div>
+
+            <form class="command-form">
+                <label for="commandInput2">Command</label>
+                <input id="commandInput2" class="command-input" type="text" autocomplete="off">
+                <button class="send-button" type="submit" disabled>Send Command</button>
+            </form>
+        </section>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@microsoft/signalr@latest/dist/browser/signalr.min.js"></script>
     <script>
@@ -275,13 +296,17 @@
                 return;
             }
 
-            const playerClient = createPlayerClient(document.querySelector(".player"));
+            const playerClients = Array
+                .from(document.querySelectorAll(".player"))
+                .map(createPlayerClient);
 
-            playerClient.input.focus();
+            playerClients[0].input.focus();
 
-            playerClient.start().then(() => {
-                playerClient.input.focus();
-            });
+            Promise
+                .all(playerClients.map((playerClient) => playerClient.start()))
+                .then(() => {
+                    playerClients[0].input.focus();
+                });
         });
     </script>
 </body>

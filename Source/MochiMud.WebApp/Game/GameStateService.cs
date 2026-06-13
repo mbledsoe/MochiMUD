@@ -5,7 +5,6 @@ namespace MochiMud.WebApp.Game
 {
     public class GameStateService
     {
-        private const string FakePlayerNamePrefix = "Test Player";
         private const string InitialCommand = "look";
 
         private readonly CommandExecutionQueue commandExecutionQueue;
@@ -25,17 +24,13 @@ namespace MochiMud.WebApp.Game
             this.playerGroupService = playerGroupService;
         }
 
-        public async Task<Player> AddPlayerToGameAsync(ICommandClient client, CancellationToken cancellationToken = default)
+        public async Task AddPlayerToGameAsync(Player player, ICommandClient client, CancellationToken cancellationToken = default)
         {
-            var player = new Player($"{FakePlayerNamePrefix} {Random.Shared.Next(0, 10000):0000}");
-
             playerDataService.Add(player);
 
             logger.LogInformation("Added player {PlayerName} to the game.", player.Name);
 
             await commandExecutionQueue.EnqueueAsync(new QueuedCommand(InitialCommand, client, player), cancellationToken);
-
-            return player;
         }
 
         public void RemovePlayerFromGame(Player player)

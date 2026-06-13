@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MochiMUD - Sign in</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f4f5f7;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+            box-sizing: border-box;
+            padding: 2rem;
+            width: 24rem;
+            max-width: calc(100vw - 2rem);
+        }
+
+        h1 {
+            margin: 0 0 0.25rem;
+            font-size: 1.5rem;
+        }
+
+        .subtitle {
+            color: #666;
+            margin: 0 0 1.5rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .tab {
+            background: #eef0f3;
+            border: 1px solid transparent;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            flex: 1;
+            font: inherit;
+            padding: 0.5rem;
+        }
+
+        .tab[aria-selected="true"] {
+            background: #265d97;
+            color: #fff;
+        }
+
+        form {
+            display: none;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        form.active {
+            display: flex;
+        }
+
+        label {
+            display: flex;
+            flex-direction: column;
+            font-size: 0.9rem;
+            gap: 0.25rem;
+        }
+
+        input {
+            border: 1px solid #ccc;
+            border-radius: 0.4rem;
+            box-sizing: border-box;
+            font: inherit;
+            padding: 0.5rem;
+            width: 100%;
+        }
+
+        button[type="submit"] {
+            background: #265d97;
+            border: none;
+            border-radius: 0.4rem;
+            color: #fff;
+            cursor: pointer;
+            font: inherit;
+            margin-top: 0.25rem;
+            padding: 0.6rem;
+        }
+
+        button[type="submit"]:disabled {
+            opacity: 0.6;
+            cursor: progress;
+        }
+
+        .hint {
+            color: #777;
+            font-size: 0.8rem;
+            margin: 0;
+        }
+
+        .message {
+            border-radius: 0.4rem;
+            display: none;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            padding: 0.6rem 0.75rem;
+        }
+
+        .message.error {
+            background: #fdecea;
+            color: #9b1c1c;
+            display: block;
+        }
+
+        .message.success {
+            background: #e7f4ea;
+            color: #1b5e20;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <main class="card">
+        <h1>MochiMUD</h1>
+        <p class="subtitle">Sign in or create an account to play.</p>
+
+        <div class="tabs" role="tablist">
+            <button class="tab" id="loginTab" type="button" role="tab" aria-selected="true" aria-controls="loginForm">Log in</button>
+            <button class="tab" id="registerTab" type="button" role="tab" aria-selected="false" aria-controls="registerForm">Create account</button>
+        </div>
+
+        <div class="message" id="message" role="status"></div>
+
+        <form class="active" id="loginForm" aria-labelledby="loginTab">
+            <label>
+                Username
+                <input id="loginUsername" name="username" type="text" autocomplete="username" required>
+            </label>
+            <label>
+                Password
+                <input id="loginPassword" name="password" type="password" autocomplete="current-password" required>
+            </label>
+            <button type="submit">Log in</button>
+        </form>
+
+        <form id="registerForm" aria-labelledby="registerTab">
+            <label>
+                Username
+                <input id="registerUsername" name="username" type="text" autocomplete="username" required>
+            </label>
+            <label>
+                Password
+                <input id="registerPassword" name="password" type="password" autocomplete="new-password" required>
+            </label>
+            <p class="hint">Username: 3-20 letters, digits, or underscore. Password: at least 8 characters.</p>
+            <button type="submit">Create account</button>
+        </form>
+    </main>
+
+    <script>
+        const loginTab = document.getElementById("loginTab");
+        const registerTab = document.getElementById("registerTab");
+        const loginForm = document.getElementById("loginForm");
+        const registerForm = document.getElementById("registerForm");
+        const message = document.getElementById("message");
+
+        function showMessage(text, kind) {
+            message.textContent = text;
+            message.className = `message ${kind}`;
+        }
+
+        function clearMessage() {
+            message.textContent = "";
+            message.className = "message";
+        }
+
+        function selectTab(activeTab, activeForm, inactiveTab, inactiveForm) {
+            activeTab.setAttribute("aria-selected", "true");
+            inactiveTab.setAttribute("aria-selected", "false");
+            activeForm.classList.add("active");
+            inactiveForm.classList.remove("active");
+            clearMessage();
+        }
+
+        loginTab.addEventListener("click", () => selectTab(loginTab, loginForm, registerTab, registerForm));
+        registerTab.addEventListener("click", () => selectTab(registerTab, registerForm, loginTab, loginForm));
+
+        async function submitCredentials(url, form) {
+            const formData = new FormData(form);
+            const payload = {
+                username: (formData.get("username") || "").trim(),
+                password: formData.get("password") || ""
+            };
+
+            const submitButton = form.querySelector("button[type=submit]");
+            submitButton.disabled = true;
+
+            try {
+                const response = await fetch(url, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "same-origin",
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    window.location.replace("/");
+                    return;
+                }
+
+                let detail = "";
+
+                try {
+                    detail = await response.text();
+                } catch {
+                    detail = "";
+                }
+
+                if (response.status === 401) {
+                    showMessage("Invalid username or password.", "error");
+                } else if (response.status === 409) {
+                    showMessage(detail || "Username is already taken.", "error");
+                } else if (response.status === 400) {
+                    showMessage(detail || "Please check your username and password.", "error");
+                } else {
+                    showMessage(`Unexpected error (${response.status}).`, "error");
+                }
+            } catch (error) {
+                showMessage(`Request failed: ${error}`, "error");
+            } finally {
+                submitButton.disabled = false;
+            }
+        }
+
+        loginForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            await submitCredentials("/auth/login", loginForm);
+        });
+
+        registerForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            await submitCredentials("/auth/register", registerForm);
+        });
+    </script>
+</body>
+</html>

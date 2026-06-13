@@ -1,17 +1,48 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using MochiMud.WebApp.Authentication;
 using MochiMud.WebApp.Commands;
+using MochiMud.WebApp.Connections;
 using MochiMud.WebApp.Game;
 using MochiMud.WebApp.GameLoop;
 using MochiMud.WebApp.Hubs;
 using MochiMud.WebApp.Mobs;
 using MochiMud.WebApp.Players;
+using MochiMud.WebApp.Storage;
 using MochiMud.WebApp.World;
 
 namespace MochiMud.WebApp
 {
     public static class ServiceCollectionExtensions
     {
+        public static IServiceCollection AddMudAuthServices(this IServiceCollection services)
+        {
+            services.AddSingleton<IAccountStore, JsonAccountStore>();
+            services.AddSingleton<IPasswordHasher, PasswordHasher>();
+            services.AddSingleton<AccountService>();
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.Events.OnRedirectToLogin = context =>
+                    {
+                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                        return Task.CompletedTask;
+                    };
+                    options.Events.OnRedirectToAccessDenied = context =>
+                    {
+                        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                        return Task.CompletedTask;
+                    };
+                });
+
+            services.AddAuthorization();
+
+            return services;
+        }
+
         public static IServiceCollection AddMudCommandServices(this IServiceCollection services)
         {
             services.AddSingleton<CommandExecutionQueue>();
@@ -36,6 +67,13 @@ namespace MochiMud.WebApp
             return services;
         }
 
+        public static IServiceCollection AddMudConnectionServices(this IServiceCollection services)
+        {
+            services.AddSingleton<ConnectionManager>();
+
+            return services;
+        }
+
         public static IServiceCollection AddMudGameServices(this IServiceCollection services)
         {
             services.AddSingleton<GameStateService>();
@@ -54,7 +92,9 @@ namespace MochiMud.WebApp
         public static IServiceCollection AddMudPlayerServices(this IServiceCollection services)
         {
             services.AddSingleton<IPlayerDataService, PlayerDataService>();
+            services.AddSingleton<IPlayerStore, JsonPlayerStore>();
             services.AddSingleton<PlayerConnectionRegistry>();
+            services.AddSingleton<PlayerCreationService>();
             services.AddSingleton<PlayerGroupService>();
 
             return services;
@@ -64,6 +104,18 @@ namespace MochiMud.WebApp
         {
             services.AddSingleton<ICommandNotificationService, SignalRCommandNotificationService>();
             services.AddSignalR();
+
+            return services;
+        }
+
+        public static IServiceCollection AddMudStorageServices(this IServiceCollection services)
+        {
+            services.AddOptions<DataStorageOptions>()
+                .BindConfiguration(DataStorageOptions.SectionName)
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
+
+            services.AddSingleton<DataDirectoryProvider>();
 
             return services;
         }

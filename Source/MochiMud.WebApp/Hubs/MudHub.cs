@@ -1,55 +1,46 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
-using MochiMud.WebApp.Commands;
-using MochiMud.WebApp.Game;
-using MochiMud.WebApp.Players;
+using MochiMud.WebApp.Connections;
 
 namespace MochiMud.WebApp.Hubs
 {
+    [Authorize]
     public class MudHub : Hub
     {
-        private readonly CommandExecutionQueue commandExecutionQueue;
-        private readonly GameStateService gameStateService;
+        private readonly ConnectionManager connectionManager;
         private readonly IHubContext<MudHub> hubContext;
         private readonly ILogger<MudHub> logger;
-        private readonly PlayerConnectionRegistry playerConnectionRegistry;
 
         public MudHub(
-            CommandExecutionQueue commandExecutionQueue,
-            GameStateService gameStateService,
+            ConnectionManager connectionManager,
             IHubContext<MudHub> hubContext,
-            ILogger<MudHub> logger,
-            PlayerConnectionRegistry playerConnectionRegistry)
+            ILogger<MudHub> logger)
         {
-            this.commandExecutionQueue = commandExecutionQueue;
-            this.gameStateService = gameStateService;
+            this.connectionManager = connectionManager;
             this.hubContext = hubContext;
             this.logger = logger;
-            this.playerConnectionRegistry = playerConnectionRegistry;
         }
 
         public override async Task OnConnectedAsync()
         {
-            var client = new SignalRCommandClient(hubContext, Context.ConnectionId);
-            var player = await gameStateService.AddPlayerToGameAsync(client, Context.ConnectionAborted);
+            if (!TryGetAccountId(out var accountId))
+            {
+                logger.LogWarning("Connection {ConnectionId} has no account identifier.", Context.ConnectionId);
+                Context.Abort();
+                return;
+            }
 
-            playerConnectionRegistry.AddOrUpdate(Context.ConnectionId, player);
-
-            logger.LogInformation(
-                "Associated player {PlayerName} with connection {ConnectionId}.",
-                player.Name,
-                Context.ConnectionId);
+            await connectionManager.OnConnectedAsync(CreateConnection(accountId), Context.ConnectionAborted);
 
             await base.OnConnectedAsync();
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            if (playerConnectionRegistry.TryRemovePlayer(Context.ConnectionId, out var player) && player is not null)
-            {
-                gameStateService.RemovePlayerFromGame(player);
-            }
+            TryGetAccountId(out var accountId);
 
-            logger.LogInformation("Removed player for connection {ConnectionId}.", Context.ConnectionId);
+            await connectionManager.OnDisconnectedAsync(CreateConnection(accountId), Context.ConnectionAborted);
 
             await base.OnDisconnectedAsync(exception);
         }
@@ -58,15 +49,25 @@ namespace MochiMud.WebApp.Hubs
         {
             logger.LogInformation("Received command from {ConnectionId}: {Command}", Context.ConnectionId, command);
 
-            if (!playerConnectionRegistry.TryGetPlayer(Context.ConnectionId, out var player) || player is null)
+            if (!TryGetAccountId(out var accountId))
             {
-                logger.LogWarning("No player found for connection {ConnectionId}.", Context.ConnectionId);
+                logger.LogWarning("Connection {ConnectionId} has no account identifier.", Context.ConnectionId);
                 return;
             }
 
-            var client = new SignalRCommandClient(hubContext, Context.ConnectionId);
+            await connectionManager.OnInputAsync(CreateConnection(accountId), command, Context.ConnectionAborted);
+        }
 
-            await commandExecutionQueue.EnqueueAsync(new QueuedCommand(command, client, player), Context.ConnectionAborted);
+        private IClientConnection CreateConnection(Guid accountId)
+        {
+            return new SignalRClientConnection(hubContext, Context.ConnectionId, accountId);
+        }
+
+        private bool TryGetAccountId(out Guid accountId)
+        {
+            var accountIdValue = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            return Guid.TryParse(accountIdValue, out accountId);
         }
     }
 }

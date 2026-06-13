@@ -69,7 +69,21 @@ create high-quality code with Cursor.
 6/8/2026
 - Adequately created a build pipeline for GitHub actions + Azure app service deployment.
 - Adequately created a help command.  Required guidance to exclude help from the command list.
-- Adequately added an "unknown command" message.
-		
+- Adequately added an "unknown command" message.		
 	
+6/13/2026 (using Opus 4.8 model)
+- Adequately created PlayerData and PlayerDatabase code.  Strangely, it didn't rename the database class correctly to match the interface name I requested.
+- Adequately added account storage and verification with password hashing	
+- Created an abomination of API endpoints in a class called AuthEndpoints, putting all log for all endpoints inside a master Map statement.  
+	- I personally don't like minimal APIs so I had it move them to an MVC controller.
+- I didn't realize it had created a Register endpoint and asked it to create one.  It correctly detected that it already existed.
+- Adequately created a login.html page with flows back and forth from index.html as requested
+- Excelled at splitting index.html into mud.html (for game UI) and a lightweight router page.
+- Excelled at creating a stateful workflow for player creation.
+	- Failed again to abstract the concept of player connection from the signalR interactions.
+		- Adequately refactored to a transport-agnostic connection abstraction after guidance.
+- Failed at adding BaseDataDirectory config option.  Added an invalid fallback based on ContentRoot and did not fail fast on startup.
+	- Adequately refactored and created configuration class based on guidance.
+		
+
 

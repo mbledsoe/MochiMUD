@@ -10,16 +10,13 @@ namespace MochiMud.WebApp.Characters
         {
             Name = name;
             BareHandDamage = new DamageDiceSpecification(1, 2);
-            MaximumHitPoints = 50;
-            HitPoints = MaximumHitPoints;
+            HitPoints = ResourcePool.Full(50);
             State = CharacterState.Standing;
         }
 
         public string Name { get; }
 
-        public int HitPoints { get; set; }
-
-        public int MaximumHitPoints { get; set; }
+        public ResourcePool HitPoints { get; set; }
 
         public DamageDiceSpecification BareHandDamage { get; set; }
 

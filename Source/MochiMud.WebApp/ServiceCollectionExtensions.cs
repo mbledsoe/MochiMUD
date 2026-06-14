@@ -10,6 +10,7 @@ using MochiMud.WebApp.GameLoop;
 using MochiMud.WebApp.Hubs;
 using MochiMud.WebApp.Mobs;
 using MochiMud.WebApp.Players;
+using MochiMud.WebApp.Spells;
 using MochiMud.WebApp.Storage;
 using MochiMud.WebApp.World;
 
@@ -50,18 +51,28 @@ namespace MochiMud.WebApp
             services.AddSingleton<CommandProcessor>();
             services.AddSingleton<FightService>();
             services.AddSingleton<MoveService>();
+            services.AddSingleton<ExitsPresenter>();
             services.AddSingleton<RoomPresenter>();
+            services.AddSingleton<SpellRegistry>();
+            services.AddSingleton<ICommandHandler, AutoExitsHandler>();
+            services.AddSingleton<ICommandHandler, CastHandler>();
+            services.AddSingleton<ICommandHandler, ExitsHandler>();
             services.AddSingleton<ICommandHandler, FleeHandler>();
             services.AddSingleton<ICommandHandler, FollowHandler>();
             services.AddSingleton<ICommandHandler, HelpHandler>();
             services.AddSingleton<ICommandHandler, KillHandler>();
             services.AddSingleton<ICommandHandler, LookHandler>();
             services.AddSingleton<ICommandHandler, MoveHandler>();
+            services.AddSingleton<ICommandHandler, RecallHandler>();
             services.AddSingleton<ICommandHandler, ReviveHandler>();
 
+            services.AddDirectionCommand("n", Direction.North);
             services.AddDirectionCommand("north", Direction.North);
+            services.AddDirectionCommand("s", Direction.South);
             services.AddDirectionCommand("south", Direction.South);
+            services.AddDirectionCommand("e", Direction.East);
             services.AddDirectionCommand("east", Direction.East);
+            services.AddDirectionCommand("w", Direction.West);
             services.AddDirectionCommand("west", Direction.West);
 
             return services;

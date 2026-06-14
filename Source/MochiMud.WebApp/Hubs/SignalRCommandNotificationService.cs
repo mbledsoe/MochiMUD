@@ -60,7 +60,10 @@ namespace MochiMud.WebApp.Hubs
                 return;
             }
 
-            var update = new PlayerStatsUpdate(player.Id, player.HitPoints, player.MaximumHitPoints);
+            var update = new PlayerStatsUpdate(
+                player.Id,
+                player.HitPoints,
+                player.Mana);
 
             await hubContext.Clients
                 .Clients(connectionIds)

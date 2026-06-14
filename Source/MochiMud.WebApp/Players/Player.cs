@@ -8,6 +8,8 @@ namespace MochiMud.WebApp.Players
     {
         public const int MinimumLevel = 1;
         public const int MaximumLevel = 50;
+        public const int MageStartingMana = 20;
+        public const int ClericStartingMana = 20;
 
         private int level;
 
@@ -16,13 +18,17 @@ namespace MochiMud.WebApp.Players
             string name,
             PlayerClass playerClass,
             int level = MinimumLevel,
-            int experiencePoints = 0)
+            int experiencePoints = 0,
+            ResourcePool? mana = null,
+            bool autoExits = false)
             : base(name)
         {
             Id = id;
             Class = playerClass;
             Level = level;
             ExperiencePoints = experiencePoints;
+            Mana = mana ?? GetStartingMana(playerClass);
+            AutoExits = autoExits;
             CurrentRoomId = WorldConstants.DefaultStartRoomId;
             Weapon = new Weapon("A rusty epee", new DamageDiceSpecification(1, 6));
         }
@@ -55,14 +61,34 @@ namespace MochiMud.WebApp.Players
 
         public int ExperiencePoints { get; set; }
 
+        public ResourcePool Mana { get; set; }
+
+        public bool AutoExits { get; set; }
+
         public Guid CurrentRoomId { get; set; }
 
         public static Player FromData(PlayerData data)
         {
-            return new Player(data.Id, data.Name, data.Class, data.Level, data.ExperiencePoints)
+            return new Player(
+                data.Id,
+                data.Name,
+                data.Class,
+                data.Level,
+                data.ExperiencePoints,
+                data.Mana,
+                data.AutoExits)
             {
-                MaximumHitPoints = data.MaximumHitPoints,
-                HitPoints = data.MaximumHitPoints,
+                HitPoints = data.HitPoints,
+            };
+        }
+
+        private static ResourcePool GetStartingMana(PlayerClass playerClass)
+        {
+            return playerClass switch
+            {
+                PlayerClass.Cleric => ResourcePool.Full(ClericStartingMana),
+                PlayerClass.Mage => ResourcePool.Full(MageStartingMana),
+                _ => ResourcePool.Empty,
             };
         }
     }

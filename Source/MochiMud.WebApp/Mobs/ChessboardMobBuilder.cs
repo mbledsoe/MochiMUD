@@ -31,10 +31,12 @@ namespace MochiMud.WebApp.Mobs
             if (name.EndsWith("King", StringComparison.Ordinal))
             {
                 mob.BareHandDamage = new DamageDiceSpecification(5, 5);
+                mob.IsAggressive = true;
             }
             else if (name.EndsWith("Queen", StringComparison.Ordinal))
             {
                 mob.BareHandDamage = new DamageDiceSpecification(5, 50);
+                mob.IsAggressive = true;
             }
 
             return mob;

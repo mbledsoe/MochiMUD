@@ -17,6 +17,8 @@
     --color-room-player: #6fb36f;
     --color-hp: #ff6b6b;
     --color-hp-dim: #a85a5a;
+    --color-mana: #4ade80;
+    --color-mana-dim: #6fb36f;
     --color-online: #4ade80;
     --color-notice-error-bg: #3a1d1d;
     --color-notice-error-text: #f4a6a6;
@@ -240,6 +242,12 @@ button[type="submit"]:disabled {
     white-space: pre-line;
 }
 
+.player-stats {
+    align-items: baseline;
+    display: flex;
+    gap: 0.75rem;
+}
+
 .hp-current {
     color: var(--color-hp);
     font-weight: 700;
@@ -247,6 +255,16 @@ button[type="submit"]:disabled {
 
 .hp-rest {
     color: var(--color-hp-dim);
+    font-weight: 400;
+}
+
+.mana-current {
+    color: var(--color-mana);
+    font-weight: 700;
+}
+
+.mana-rest {
+    color: var(--color-mana-dim);
     font-weight: 400;
 }
 
@@ -314,8 +332,16 @@ button[type="submit"]:disabled {
     color: var(--color-room-mob);
 }
 
+.room-object {
+    color: var(--color-text-muted);
+}
+
 .room-player {
     color: var(--color-room-player);
+}
+
+.room-exit {
+    color: var(--color-text-muted);
 }
 
 /* Authentication (login.html) */

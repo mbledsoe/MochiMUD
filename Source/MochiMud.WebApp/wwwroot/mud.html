@@ -32,7 +32,10 @@
 
     <footer class="status-bar">
         <div class="status-bar-content">
-            <span class="hp-display" aria-live="polite"></span>
+            <span class="player-stats" aria-live="polite">
+                <span class="hp-display"></span>
+                <span class="mana-display"></span>
+            </span>
             <span class="status">
                 <span class="status-dot" aria-hidden="true"></span>
                 <span class="status-text" role="status">Connecting...</span>
@@ -48,6 +51,7 @@
             const status = document.querySelector(".status-text");
             const statusDot = document.querySelector(".status-dot");
             const hpDisplay = document.querySelector(".hp-display");
+            const manaDisplay = document.querySelector(".mana-display");
             const output = playerElement.querySelector(".output");
             const outputContent = playerElement.querySelector(".output-content");
             const form = playerElement.querySelector(".command-form");
@@ -74,8 +78,12 @@
                     return;
                 }
 
-                const current = update.currentHitPoints ?? update.CurrentHitPoints;
-                const max = update.maximumHitPoints ?? update.MaximumHitPoints;
+                const hitPoints = update.hitPoints ?? update.HitPoints;
+                const mana = update.mana ?? update.Mana;
+                const current = hitPoints?.current ?? hitPoints?.Current;
+                const max = hitPoints?.maximum ?? hitPoints?.Maximum;
+                const currentMana = mana?.current ?? mana?.Current;
+                const maxMana = mana?.maximum ?? mana?.Maximum;
 
                 if (current === undefined || max === undefined) {
                     return;
@@ -90,6 +98,21 @@
                 restElement.textContent = `/${max} hp`;
 
                 hpDisplay.replaceChildren(currentElement, restElement);
+
+                if (currentMana === undefined || maxMana === undefined) {
+                    manaDisplay.replaceChildren();
+                    return;
+                }
+
+                const currentManaElement = document.createElement("span");
+                currentManaElement.className = "mana-current";
+                currentManaElement.textContent = currentMana;
+
+                const manaRestElement = document.createElement("span");
+                manaRestElement.className = "mana-rest";
+                manaRestElement.textContent = `/${maxMana} mana`;
+
+                manaDisplay.replaceChildren(currentManaElement, manaRestElement);
             }
 
             function appendHtmlOutput(message) {

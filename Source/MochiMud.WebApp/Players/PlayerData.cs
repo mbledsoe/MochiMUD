@@ -1,10 +1,14 @@
+using MochiMud.WebApp.Characters;
+
 namespace MochiMud.WebApp.Players
 {
     public sealed record PlayerData(
         Guid Id,
         string Name,
-        int MaximumHitPoints,
+        ResourcePool HitPoints,
         PlayerClass Class,
         int Level,
-        int ExperiencePoints);
+        int ExperiencePoints,
+        ResourcePool Mana,
+        bool AutoExits);
 }

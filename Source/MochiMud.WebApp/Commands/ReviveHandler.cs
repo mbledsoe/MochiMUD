@@ -22,7 +22,7 @@ namespace MochiMud.WebApp.Commands
         {
             logger.LogInformation("Handling revive command: {Command}", command);
 
-            player.HitPoints = player.MaximumHitPoints;
+            player.HitPoints = player.HitPoints.RestoreToMaximum();
 
             if (player.State == CharacterState.Dead)
             {

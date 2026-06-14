@@ -17,5 +17,7 @@ namespace MochiMud.WebApp.Mobs
         }
 
         public Guid CurrentRoomId { get; set; }
+
+        public bool IsAggressive { get; set; }
     }
 }

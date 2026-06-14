@@ -14,6 +14,7 @@ namespace MochiMud.WebApp.Commands
             Room room,
             IReadOnlyCollection<Mob> mobs,
             IReadOnlyCollection<Player> players,
+            string? exitsText = null,
             CancellationToken cancellationToken = default);
     }
 }

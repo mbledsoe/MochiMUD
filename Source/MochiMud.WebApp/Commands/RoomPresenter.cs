@@ -6,17 +6,20 @@ namespace MochiMud.WebApp.Commands
 {
     public class RoomPresenter
     {
+        private readonly ExitsPresenter exitsPresenter;
         private readonly ILogger<RoomPresenter> logger;
         private readonly IMobDataService mobDataService;
         private readonly IPlayerDataService playerDataService;
         private readonly IWorldDataService worldDataService;
 
         public RoomPresenter(
+            ExitsPresenter exitsPresenter,
             ILogger<RoomPresenter> logger,
             IMobDataService mobDataService,
             IPlayerDataService playerDataService,
             IWorldDataService worldDataService)
         {
+            this.exitsPresenter = exitsPresenter;
             this.logger = logger;
             this.mobDataService = mobDataService;
             this.playerDataService = playerDataService;
@@ -43,7 +46,11 @@ namespace MochiMud.WebApp.Commands
                 .Where(roomPlayer => !ReferenceEquals(roomPlayer, player))
                 .ToArray();
 
-            await client.SendRoomAsync(room, mobs, players, cancellationToken);
+            var exitsText = player.AutoExits
+                ? await exitsPresenter.FormatExitsAsync(room, cancellationToken)
+                : null;
+
+            await client.SendRoomAsync(room, mobs, players, exitsText, cancellationToken);
 
             return true;
         }

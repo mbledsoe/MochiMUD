@@ -37,6 +37,7 @@ namespace MochiMud.WebApp.Hubs
             Room room,
             IReadOnlyCollection<Mob> mobs,
             IReadOnlyCollection<Player> players,
+            string? exitsText = null,
             CancellationToken cancellationToken = default)
         {
             var message = new StringBuilder();
@@ -57,6 +58,18 @@ namespace MochiMud.WebApp.Hubs
                 message.AppendLine("</div>");
             }
 
+            if (room.Objects.Count > 0)
+            {
+                message.AppendLine("<div class=\"room-section room-objects\">");
+
+                foreach (var roomObject in room.Objects)
+                {
+                    message.AppendLine($"<div class=\"room-object\">{HtmlMessageFormatter.HtmlEncode(roomObject.Description)}</div>");
+                }
+
+                message.AppendLine("</div>");
+            }
+
             if (players.Count > 0)
             {
                 message.AppendLine("<div class=\"room-section room-players\">");
@@ -66,6 +79,13 @@ namespace MochiMud.WebApp.Hubs
                     message.AppendLine($"<div class=\"room-player\">{FormatPlayerRoomText(player)}</div>");
                 }
 
+                message.AppendLine("</div>");
+            }
+
+            if (!string.IsNullOrWhiteSpace(exitsText))
+            {
+                message.AppendLine("<div class=\"room-section room-exits\">");
+                message.AppendLine($"<div class=\"room-exit\">{HtmlMessageFormatter.HtmlEncode(exitsText)}</div>");
                 message.AppendLine("</div>");
             }
 

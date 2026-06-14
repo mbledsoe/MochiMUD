@@ -109,3 +109,14 @@ Next time:
 - Adequately added class, levels, and xp fields to Players
 	- It identified the missing class property in existing data but it did not offer the option of directly migrating the current data files.  It did this after guidance.
 	- Incorrectly assumed that this data should be added to PlayerStatsUpdate and removed this code after guidance.
+- Excelled at adding "spells" from a very high level prompt "mages should have spells, how should we add this?"
+	- Plugged into the current architecture correctly.
+- Failed to identify the pattern of current/max value objects.
+	- Excelled at adding a "ResourcePool" value object after guidance.
+- Excelled at creating a new world area "Hockesden" based on directions about what the world should contain and where rooms are connected.
+	- Excelled at integrating Hockesden world with the current world data patterns.
+- Adequately added Exits command and AutoExits toggle command.
+- Adequately added Portal room and recall command
+- Failed appending natural exit descriptions to room descriptions.
+	- Adequately generated prose descriptions after additional guidance.
+- Excelled at adding aggressive mobs with very specific implementation guidance.  Integrated well with existing fight code.

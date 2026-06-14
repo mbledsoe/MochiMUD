@@ -26,10 +26,12 @@ namespace MochiMud.WebApp.Players
             var playerData = new PlayerData(
                 player.Id,
                 player.Name,
-                player.MaximumHitPoints,
+                player.HitPoints,
                 player.Class,
                 player.Level,
-                player.ExperiencePoints);
+                player.ExperiencePoints,
+                player.Mana,
+                player.AutoExits);
 
             var filePath = GetFilePath(player.Id);
             var tempFilePath = filePath + ".tmp";

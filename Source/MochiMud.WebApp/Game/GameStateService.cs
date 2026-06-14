@@ -36,6 +36,12 @@ namespace MochiMud.WebApp.Game
 
             logger.LogInformation("Added player {PlayerName} to the game.", player.Name);
 
+            await commandNotificationService.SendToPlayersInRoomExceptAsync(
+                player.CurrentRoomId,
+                player,
+                $"{player.Name} has entered the realm!",
+                cancellationToken);
+
             var banner = welcomeBannerProvider.GetBanner();
 
             if (banner is not null)

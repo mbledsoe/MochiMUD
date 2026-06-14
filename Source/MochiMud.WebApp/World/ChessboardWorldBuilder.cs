@@ -77,11 +77,6 @@ namespace MochiMud.WebApp.World
 
         public static Guid GetRoomId(char file, int rank)
         {
-            if (file == 'E' && rank == 1)
-            {
-                return WorldConstants.DefaultStartRoomId;
-            }
-
             return new Guid(0x1f313c8a, 0x5f07, 0x4caa, 0x90, 0x00, 0x00, 0x00, 0x00, 0x00, (byte)file, (byte)rank);
         }
     }

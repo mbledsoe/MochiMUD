@@ -132,3 +132,5 @@ Next time:
 - Partially successful on abstracting file storage details into local file and azure blob storage.
 	- Adequately implemented interfaces and DI configuration
 	- Failed to separate the configuration for local file store from azure blob store.  Included "connection string" in a generic "file storage" options class.
+- Failed to create a default constructor when Room was moved to a json file.
+	- Adequately corrected the issue after being given the exception message.

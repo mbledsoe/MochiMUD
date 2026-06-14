@@ -5,13 +5,7 @@ namespace MochiMud.WebApp.World
         string Title,
         string Description,
         IReadOnlyCollection<Exit> Exits,
-        IReadOnlyCollection<RoomObject> Objects)
-    {
-        public Room(Guid id, string title, string description, IReadOnlyCollection<Exit> exits)
-            : this(id, title, description, exits, [])
-        {
-        }
-    }
+        IReadOnlyCollection<RoomObject> Objects);
 
     public record Exit(Direction Direction, Guid DestinationRoomId);
 

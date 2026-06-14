@@ -1,31 +1,19 @@
-using MochiMud.WebApp.Combat;
-using MochiMud.WebApp.Players;
-
 namespace MochiMud.WebApp.Spells
 {
     public class SpellRegistry
     {
-        private static readonly SpellDefinition LightningBolt = new(
-            "lightning bolt",
-            PlayerClass.Mage,
-            5,
-            new DamageDiceSpecification(2, 6),
-            SpellEffect.Damage);
+        private readonly IReadOnlyCollection<ISpell> spells;
 
-        private static readonly SpellDefinition Cure = new(
-            "cure",
-            PlayerClass.Cleric,
-            5,
-            new DamageDiceSpecification(2, 6),
-            SpellEffect.Heal);
+        public SpellRegistry(IEnumerable<ISpell> spells)
+        {
+            this.spells = spells.ToArray();
+        }
 
-        private static readonly IReadOnlyCollection<SpellDefinition> Spells = [LightningBolt, Cure];
-
-        public bool TryMatchSpell(string input, out SpellDefinition spell, out string? targetName)
+        public bool TryMatchSpell(string input, out ISpell spell, out string? targetName)
         {
             var trimmedInput = input.Trim();
 
-            foreach (var candidate in Spells.OrderByDescending(spell => spell.Name.Length))
+            foreach (var candidate in spells.OrderByDescending(spell => spell.Name.Length))
             {
                 if (!trimmedInput.StartsWith(candidate.Name, StringComparison.OrdinalIgnoreCase))
                 {

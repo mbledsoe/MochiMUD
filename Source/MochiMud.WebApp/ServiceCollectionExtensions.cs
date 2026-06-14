@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using MochiMud.WebApp.Authentication;
 using MochiMud.WebApp.Commands;
 using MochiMud.WebApp.Connections;
@@ -51,9 +52,13 @@ namespace MochiMud.WebApp
             services.AddSingleton<CommandProcessor>();
             services.AddSingleton<FightService>();
             services.AddSingleton<MoveService>();
+            services.AddSingleton<RecallService>();
             services.AddSingleton<ExitsPresenter>();
             services.AddSingleton<RoomPresenter>();
             services.AddSingleton<SpellRegistry>();
+            services.AddSingleton<ISpell, CureSpell>();
+            services.AddSingleton<ISpell, LightningBoltSpell>();
+            services.AddSingleton<ISpell, RecallSpell>();
             services.AddSingleton<ICommandHandler, AutoExitsHandler>();
             services.AddSingleton<ICommandHandler, CastHandler>();
             services.AddSingleton<ICommandHandler, ExitsHandler>();
@@ -134,6 +139,31 @@ namespace MochiMud.WebApp
 
         public static IServiceCollection AddMudWorldServices(this IServiceCollection services)
         {
+            services.AddOptions<WorldFileStorageOptions>()
+                .BindConfiguration(WorldFileStorageOptions.SectionName)
+                .Validate(
+                    options => Enum.IsDefined(options.Provider)
+                        && (options.Provider != WorldFileStorageProvider.AzureBlobStorage
+                            || (!string.IsNullOrWhiteSpace(options.AzureBlobStorage.ContainerName)
+                                && (!string.IsNullOrWhiteSpace(options.AzureBlobStorage.ConnectionString)
+                                    || options.AzureBlobStorage.ServiceUri is not null))),
+                    "World file storage configuration is invalid.")
+                .ValidateOnStart();
+
+            services.AddSingleton<IWorldFileStore>(serviceProvider =>
+            {
+                var options = serviceProvider.GetRequiredService<IOptions<WorldFileStorageOptions>>().Value;
+
+                return options.Provider switch
+                {
+                    WorldFileStorageProvider.LocalFileSystem =>
+                        ActivatorUtilities.CreateInstance<LocalWorldFileStore>(serviceProvider),
+                    WorldFileStorageProvider.AzureBlobStorage =>
+                        ActivatorUtilities.CreateInstance<AzureBlobWorldFileStore>(serviceProvider),
+                    _ => throw new InvalidOperationException($"Unsupported world file storage provider: {options.Provider}"),
+                };
+            });
+
             services.AddSingleton<JsonWorldAreaManifestLoader>();
             services.AddSingleton<JsonWorldAreaLoader>();
             services.AddSingleton<IWorldDataService, StaticWorldDataService>();

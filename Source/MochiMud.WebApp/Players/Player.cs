@@ -30,7 +30,7 @@ namespace MochiMud.WebApp.Players
             Mana = mana ?? GetStartingMana(playerClass);
             AutoExits = autoExits;
             CurrentRoomId = WorldConstants.DefaultStartRoomId;
-            Weapon = new Weapon("A rusty epee", new DamageDiceSpecification(1, 6));
+            Weapon = new Weapon("A rusty epee", new DiceSpecification(1, 6));
         }
 
         public Player(string name, PlayerClass playerClass)

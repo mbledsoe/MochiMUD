@@ -9,28 +9,26 @@ namespace MochiMud.WebApp.World
             PropertyNameCaseInsensitive = true,
         };
 
-        private readonly IHostEnvironment environment;
+        private readonly IWorldFileStore worldFileStore;
 
-        public JsonWorldAreaManifestLoader(IHostEnvironment environment)
+        public JsonWorldAreaManifestLoader(IWorldFileStore worldFileStore)
         {
-            this.environment = environment;
+            this.worldFileStore = worldFileStore;
         }
 
-        public IReadOnlyCollection<string> LoadAreas(string relativePath)
+        public async Task<IReadOnlyCollection<string>> LoadAreasAsync(
+            string relativePath,
+            CancellationToken cancellationToken = default)
         {
-            var path = Path.Combine(environment.ContentRootPath, relativePath);
-
-            if (!File.Exists(path))
-            {
-                throw new FileNotFoundException("World area manifest file was not found.", path);
-            }
-
-            using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
-            var areas = JsonSerializer.Deserialize<IReadOnlyCollection<string>>(stream, SerializerOptions);
+            using var stream = await worldFileStore.OpenReadAsync(relativePath, cancellationToken);
+            var areas = await JsonSerializer.DeserializeAsync<IReadOnlyCollection<string>>(
+                stream,
+                SerializerOptions,
+                cancellationToken);
 
             if (areas is null)
             {
-                throw new InvalidOperationException($"World area manifest did not contain areas: {path}");
+                throw new InvalidOperationException($"World area manifest did not contain areas: {relativePath}");
             }
 
             return areas;

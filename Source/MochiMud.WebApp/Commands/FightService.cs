@@ -1,7 +1,7 @@
 using MochiMud.WebApp.Characters;
+using MochiMud.WebApp.Combat;
 using MochiMud.WebApp.Mobs;
 using MochiMud.WebApp.Players;
-using MochiMud.WebApp.Spells;
 
 namespace MochiMud.WebApp.Commands
 {
@@ -91,7 +91,9 @@ namespace MochiMud.WebApp.Commands
         public async Task CastDamageSpellAsync(
             Player caster,
             Mob target,
-            SpellDefinition spell,
+            string spellName,
+            int manaCost,
+            DiceSpecification damageDice,
             CancellationToken cancellationToken = default)
         {
             var activeFight = GetActiveFightForPlayer(caster);
@@ -120,20 +122,20 @@ namespace MochiMud.WebApp.Commands
                 return;
             }
 
-            caster.Mana = caster.Mana.Spend(spell.ManaCost);
+            caster.Mana = caster.Mana.Spend(manaCost);
 
-            var damage = spell.EffectDice.Roll();
+            var damage = damageDice.Roll();
             activeFight.Mob.HitPoints = activeFight.Mob.HitPoints.Reduce(damage);
 
             await commandNotificationService.SendToPlayersAsync(
                 [caster],
-                $"You cast {spell.Name} at the {activeFight.Mob.Name} for {damage} hitpoints.",
+                $"You cast {spellName} at the {activeFight.Mob.Name} for {damage} hitpoints.",
                 cancellationToken);
 
             await commandNotificationService.SendToPlayersInRoomExceptAsync(
                 caster.CurrentRoomId,
                 caster,
-                $"{caster.Name} cast {spell.Name} at the {activeFight.Mob.Name}.",
+                $"{caster.Name} cast {spellName} at the {activeFight.Mob.Name}.",
                 cancellationToken);
 
             await commandNotificationService.SendPlayerStatsUpdateAsync(caster, cancellationToken);
@@ -147,25 +149,27 @@ namespace MochiMud.WebApp.Commands
         public async Task CastHealingSpellAsync(
             Player caster,
             Character target,
-            SpellDefinition spell,
+            string spellName,
+            int manaCost,
+            DiceSpecification healingDice,
             CancellationToken cancellationToken = default)
         {
-            caster.Mana = caster.Mana.Spend(spell.ManaCost);
+            caster.Mana = caster.Mana.Spend(manaCost);
 
-            var healing = spell.EffectDice.Roll();
+            var healing = healingDice.Roll();
             var beforeHealing = target.HitPoints.Current;
             target.HitPoints = target.HitPoints.Restore(healing);
             var restoredHitPoints = target.HitPoints.Current - beforeHealing;
 
             await commandNotificationService.SendToPlayersAsync(
                 [caster],
-                $"You cast {spell.Name} on {target.Name} and restore {restoredHitPoints} hitpoints.",
+                $"You cast {spellName} on {target.Name} and restore {restoredHitPoints} hitpoints.",
                 cancellationToken);
 
             await commandNotificationService.SendToPlayersInRoomExceptAsync(
                 caster.CurrentRoomId,
                 caster,
-                $"{caster.Name} cast {spell.Name} on {target.Name}.",
+                $"{caster.Name} cast {spellName} on {target.Name}.",
                 cancellationToken);
 
             await commandNotificationService.SendPlayerStatsUpdateAsync(caster, cancellationToken);

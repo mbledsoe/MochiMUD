@@ -9,7 +9,7 @@ namespace MochiMud.WebApp.Characters
         protected Character(string name)
         {
             Name = name;
-            BareHandDamage = new DamageDiceSpecification(1, 2);
+            BareHandDamage = new DiceSpecification(1, 2);
             HitPoints = ResourcePool.Full(50);
             State = CharacterState.Standing;
         }
@@ -18,7 +18,7 @@ namespace MochiMud.WebApp.Characters
 
         public ResourcePool HitPoints { get; set; }
 
-        public DamageDiceSpecification BareHandDamage { get; set; }
+        public DiceSpecification BareHandDamage { get; set; }
 
         public Weapon? Weapon { get; set; }
 

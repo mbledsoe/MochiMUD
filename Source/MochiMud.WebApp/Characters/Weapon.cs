@@ -4,7 +4,7 @@ namespace MochiMud.WebApp.Characters
 {
     public class Weapon
     {
-        public Weapon(string name, DamageDiceSpecification damageDice)
+        public Weapon(string name, DiceSpecification damageDice)
         {
             Name = name;
             DamageDice = damageDice;
@@ -12,6 +12,6 @@ namespace MochiMud.WebApp.Characters
 
         public string Name { get; }
 
-        public DamageDiceSpecification DamageDice { get; }
+        public DiceSpecification DamageDice { get; }
     }
 }

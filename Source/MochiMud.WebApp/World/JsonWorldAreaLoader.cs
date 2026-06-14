@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using MochiMud.WebApp.Mobs;
 
 namespace MochiMud.WebApp.World
 {
@@ -11,31 +12,68 @@ namespace MochiMud.WebApp.World
             Converters = { new JsonStringEnumConverter() },
         };
 
-        private readonly IHostEnvironment environment;
+        private readonly IWorldFileStore worldFileStore;
 
-        public JsonWorldAreaLoader(IHostEnvironment environment)
+        public JsonWorldAreaLoader(IWorldFileStore worldFileStore)
         {
-            this.environment = environment;
+            this.worldFileStore = worldFileStore;
         }
 
-        public IReadOnlyDictionary<Guid, Room> LoadRooms(string relativePath)
+        public async Task<IReadOnlyDictionary<Guid, Room>> LoadRoomsAsync(
+            string relativePath,
+            CancellationToken cancellationToken = default)
         {
-            var path = Path.Combine(environment.ContentRootPath, relativePath);
+            return (await LoadAreaAsync(relativePath, cancellationToken)).Rooms.ToDictionary(room => room.Id);
+        }
 
-            if (!File.Exists(path))
+        public async Task<IReadOnlyCollection<Mob>> LoadMobsAsync(
+            string relativePath,
+            CancellationToken cancellationToken = default)
+        {
+            var area = await LoadAreaAsync(relativePath, cancellationToken);
+            var mobDefinitions = area.MobDefinitions.ToDictionary(
+                mobDefinition => mobDefinition.Id,
+                StringComparer.OrdinalIgnoreCase);
+
+            return area.MobSpawns
+                .Select(mobSpawn => CreateMob(mobSpawn, mobDefinitions))
+                .ToArray();
+        }
+
+        private async Task<WorldAreaData> LoadAreaAsync(
+            string relativePath,
+            CancellationToken cancellationToken)
+        {
+            using var stream = await worldFileStore.OpenReadAsync(relativePath, cancellationToken);
+            var area = await JsonSerializer.DeserializeAsync<WorldAreaData>(
+                stream,
+                SerializerOptions,
+                cancellationToken);
+
+            if (area is null)
             {
-                throw new FileNotFoundException("World area data file was not found.", path);
+                throw new InvalidOperationException($"World area data file did not contain area data: {relativePath}");
             }
 
-            using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
-            var rooms = JsonSerializer.Deserialize<IReadOnlyCollection<Room>>(stream, SerializerOptions);
+            return area;
+        }
 
-            if (rooms is null)
+        private static Mob CreateMob(
+            MobSpawnData mobSpawn,
+            IReadOnlyDictionary<string, MobDefinitionData> mobDefinitions)
+        {
+            if (!mobDefinitions.TryGetValue(mobSpawn.MobDefinitionId, out var mobDefinition))
             {
-                throw new InvalidOperationException($"World area data file did not contain rooms: {path}");
+                throw new InvalidOperationException($"Unknown mob definition referenced by spawn: {mobSpawn.MobDefinitionId}");
             }
 
-            return rooms.ToDictionary(room => room.Id);
+            var mob = new Mob(mobDefinition.Name, mobSpawn.RoomId)
+            {
+                BareHandDamage = mobDefinition.BareHandDamage,
+                IsAggressive = mobDefinition.IsAggressive,
+            };
+
+            return mob;
         }
     }
 }

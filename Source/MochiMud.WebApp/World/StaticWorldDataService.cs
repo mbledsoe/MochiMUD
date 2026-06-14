@@ -10,7 +10,9 @@ namespace MochiMud.WebApp.World
             JsonWorldAreaManifestLoader jsonWorldAreaManifestLoader,
             JsonWorldAreaLoader jsonWorldAreaLoader)
         {
-            rooms = CreateRooms(jsonWorldAreaManifestLoader, jsonWorldAreaLoader);
+            rooms = CreateRoomsAsync(jsonWorldAreaManifestLoader, jsonWorldAreaLoader)
+                .GetAwaiter()
+                .GetResult();
         }
 
         public Task<Room?> GetRoomAsync(Guid roomId, CancellationToken cancellationToken = default)
@@ -20,15 +22,15 @@ namespace MochiMud.WebApp.World
             return Task.FromResult(room);
         }
 
-        private static IReadOnlyDictionary<Guid, Room> CreateRooms(
+        private static async Task<IReadOnlyDictionary<Guid, Room>> CreateRoomsAsync(
             JsonWorldAreaManifestLoader jsonWorldAreaManifestLoader,
             JsonWorldAreaLoader jsonWorldAreaLoader)
         {
             var rooms = new Dictionary<Guid, Room>();
 
-            foreach (var areaPath in jsonWorldAreaManifestLoader.LoadAreas(AreasManifestPath))
+            foreach (var areaPath in await jsonWorldAreaManifestLoader.LoadAreasAsync(AreasManifestPath))
             {
-                AddRooms(rooms, jsonWorldAreaLoader.LoadRooms(areaPath));
+                AddRooms(rooms, await jsonWorldAreaLoader.LoadRoomsAsync(areaPath));
             }
 
             return rooms;

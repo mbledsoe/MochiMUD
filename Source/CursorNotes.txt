@@ -120,7 +120,15 @@ Next time:
 - Failed appending natural exit descriptions to room descriptions.
 	- Adequately generated prose descriptions after additional guidance.
 - Excelled at adding aggressive mobs with very specific implementation guidance.  Integrated well with existing fight code.
-- Adequately extraced the Hockesden area to a json file
+- Adequately extracted the Hockesden area to a json file
 - Absolutely comically failed at extracting the chessboard to a file.  
 	- Instead of explicitly storing the data, it stored data that allowed it to dynamically build the world but required code specific to chessboard area loading.
 	- When I asked it to create an "areas.json" list of worlds, it tacked on a "Loader" property to specify dynamic loaders for each type.
+	- Adequately refactored to a common data file format after guidance
+- Adequately separated mob definitions from mob spawns to enable multiple spawns per mob definition
+- Failed when adding more spells which are not specifically "damage" or "heal" in effect.  Spells need to be fully generic and allowed to have any effects
+	- It added a weird SpellEffect enum with heal, damage, and recall to deal with the three types of spells instead of making spell effects fully extensible.
+	- Adequately refactored into spell classes after guidance.
+- Partially successful on abstracting file storage details into local file and azure blob storage.
+	- Adequately implemented interfaces and DI configuration
+	- Failed to separate the configuration for local file store from azure blob store.  Included "connection string" in a generic "file storage" options class.

@@ -1,0 +1,200 @@
+{
+  "Rooms": [
+  {
+    "Id": "6b57b778-87c7-4f24-9f53-645257db4b68",
+    "Title": "Hockesden Town Square",
+    "Description": "The center of Hockesden is a broad town square where Main Street runs east and west. Main Street leads away in both directions, and temple steps rise to the north.",
+    "Exits": [
+      {
+        "Direction": "West",
+        "DestinationRoomId": "f3519f3f-3cb4-4e18-967b-221936c4d128"
+      },
+      {
+        "Direction": "East",
+        "DestinationRoomId": "6a2dca48-2730-4947-bc01-b52a25711f95"
+      },
+      {
+        "Direction": "North",
+        "DestinationRoomId": "1aca0620-7565-4cec-98bd-d85bf8ea0299"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "f3519f3f-3cb4-4e18-967b-221936c4d128",
+    "Title": "West Main Street",
+    "Description": "Main Street continues west past the sturdy halls of Hockesden's martial and sacred guilds. The town square lies back to the east, with guild doors opening to the north and south.",
+    "Exits": [
+      {
+        "Direction": "East",
+        "DestinationRoomId": "6b57b778-87c7-4f24-9f53-645257db4b68"
+      },
+      {
+        "Direction": "North",
+        "DestinationRoomId": "bba8a148-370f-4d28-9973-c9c9ec5c9257"
+      },
+      {
+        "Direction": "South",
+        "DestinationRoomId": "7f948de0-1a9d-4778-bab7-9f045311cead"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "6a2dca48-2730-4947-bc01-b52a25711f95",
+    "Title": "East Main Street",
+    "Description": "Main Street continues east past narrow guild halls marked by arcane signs and shadowed doorways. The town square lies back to the west, with guild doors opening to the north and south.",
+    "Exits": [
+      {
+        "Direction": "West",
+        "DestinationRoomId": "6b57b778-87c7-4f24-9f53-645257db4b68"
+      },
+      {
+        "Direction": "North",
+        "DestinationRoomId": "4f9b48c9-3c5f-4de2-b13c-0ad4cf2ad066"
+      },
+      {
+        "Direction": "South",
+        "DestinationRoomId": "65cfac21-09f4-45f3-81d0-c4121b54258c"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "bba8a148-370f-4d28-9973-c9c9ec5c9257",
+    "Title": "Warrior Guild",
+    "Description": "Weapon racks and scarred practice posts fill the Warrior Guild. The door back to West Main Street stands to the south.",
+    "Exits": [
+      {
+        "Direction": "South",
+        "DestinationRoomId": "f3519f3f-3cb4-4e18-967b-221936c4d128"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "7f948de0-1a9d-4778-bab7-9f045311cead",
+    "Title": "Cleric Guild",
+    "Description": "Quiet benches and polished icons line the Cleric Guild. The door back to West Main Street stands to the north.",
+    "Exits": [
+      {
+        "Direction": "North",
+        "DestinationRoomId": "f3519f3f-3cb4-4e18-967b-221936c4d128"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "4f9b48c9-3c5f-4de2-b13c-0ad4cf2ad066",
+    "Title": "Mage Guild",
+    "Description": "Shelves of scrolls and faintly glowing lamps crowd the Mage Guild. The door back to East Main Street stands to the south.",
+    "Exits": [
+      {
+        "Direction": "South",
+        "DestinationRoomId": "6a2dca48-2730-4947-bc01-b52a25711f95"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "65cfac21-09f4-45f3-81d0-c4121b54258c",
+    "Title": "Thieves Guild",
+    "Description": "The Thieves Guild is dim, narrow, and full of carefully watched corners. The door back to East Main Street stands to the north.",
+    "Exits": [
+      {
+        "Direction": "North",
+        "DestinationRoomId": "6a2dca48-2730-4947-bc01-b52a25711f95"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "1aca0620-7565-4cec-98bd-d85bf8ea0299",
+    "Title": "Temple Steps",
+    "Description": "Stone steps climb north from the square toward a temple crowned by a white spire. The temple waits above, while the town square spreads out below.",
+    "Exits": [
+      {
+        "Direction": "South",
+        "DestinationRoomId": "6b57b778-87c7-4f24-9f53-645257db4b68"
+      },
+      {
+        "Direction": "North",
+        "DestinationRoomId": "fd71fda6-cc24-4965-a383-cdbf5340fb17"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "fd71fda6-cc24-4965-a383-cdbf5340fb17",
+    "Title": "Temple of the White Spire",
+    "Description": "The temple is cool and bright beneath the white spire rising overhead. The steps descend behind you, and an anteroom waits deeper within the temple.",
+    "Exits": [
+      {
+        "Direction": "South",
+        "DestinationRoomId": "1aca0620-7565-4cec-98bd-d85bf8ea0299"
+      },
+      {
+        "Direction": "North",
+        "DestinationRoomId": "df8ff9a2-730d-47f4-8329-2c11e9d2e176"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "df8ff9a2-730d-47f4-8329-2c11e9d2e176",
+    "Title": "Temple Anteroom",
+    "Description": "A small anteroom waits beyond the temple nave, quiet and whitewashed. The nave lies back to the south, and a side passage opens toward the portal gallery.",
+    "Exits": [
+      {
+        "Direction": "South",
+        "DestinationRoomId": "fd71fda6-cc24-4965-a383-cdbf5340fb17"
+      },
+      {
+        "Direction": "West",
+        "DestinationRoomId": "7db66507-6adf-476b-a2fe-3bed97789dd8"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "7db66507-6adf-476b-a2fe-3bed97789dd8",
+    "Title": "Portal Gallery",
+    "Description": "Ancient portals shimmer along the walls, each opening onto a different world. One portal glows to the north, while the anteroom remains safely to the east.",
+    "Exits": [
+      {
+        "Direction": "East",
+        "DestinationRoomId": "df8ff9a2-730d-47f4-8329-2c11e9d2e176"
+      },
+      {
+        "Direction": "North",
+        "DestinationRoomId": "dc5b52e7-ccf3-4cf1-bb70-a2d653b1f25b"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "dc5b52e7-ccf3-4cf1-bb70-a2d653b1f25b",
+    "Title": "The Chessboard Portal",
+    "Description": "A massive chessboard stretches beyond a large floor to ceiling window. The image shimmers, waves, and flickers like a reflection on disturbed water. The portal gallery waits behind you, and the chessboard world presses close beyond the glass.",
+    "Exits": [
+      {
+        "Direction": "South",
+        "DestinationRoomId": "7db66507-6adf-476b-a2fe-3bed97789dd8"
+      },
+      {
+        "Direction": "North",
+        "DestinationRoomId": "1f313c8a-5f07-4caa-9000-000000004504"
+      }
+    ],
+    "Objects": [
+      {
+        "Name": "plaque",
+        "Description": "A bronze plaque hangs on the wall beside the window.",
+        "ReadText": "Beyond this portal lies the Chessboard, a realm where kings and pawns wage endless war across black and white stone.  Beware not to disturb the peace of the King and Queen."
+      }
+    ]
+  }
+  ],
+  "MobDefinitions": [],
+  "MobSpawns": []
+}

@@ -1,22 +1,18 @@
 using MochiMud.WebApp.Players;
-using MochiMud.WebApp.World;
 
 namespace MochiMud.WebApp.Commands
 {
     public class RecallHandler : CommandHandlerBase
     {
-        private readonly ICommandNotificationService commandNotificationService;
         private readonly ILogger<RecallHandler> logger;
-        private readonly RoomPresenter roomPresenter;
+        private readonly RecallService recallService;
 
         public RecallHandler(
-            ICommandNotificationService commandNotificationService,
             ILogger<RecallHandler> logger,
-            RoomPresenter roomPresenter)
+            RecallService recallService)
         {
-            this.commandNotificationService = commandNotificationService;
             this.logger = logger;
-            this.roomPresenter = roomPresenter;
+            this.recallService = recallService;
         }
 
         public override string CommandName => "recall";
@@ -29,16 +25,7 @@ namespace MochiMud.WebApp.Commands
         {
             logger.LogInformation("Handling recall command: {Command}", command);
 
-            player.CurrentRoomId = WorldConstants.DefaultStartRoomId;
-
-            await commandNotificationService.SendToPlayersInRoomExceptAsync(
-                player.CurrentRoomId,
-                player,
-                $"A shimmering cloud suddenly appears and {player.Name} steps through!",
-                cancellationToken);
-
-            await client.SendMessageAsync("You recall to safety.", cancellationToken);
-            await roomPresenter.TrySendRoomAsync(player.CurrentRoomId, client, player, cancellationToken);
+            await recallService.RecallAsync(player, client, cancellationToken);
         }
     }
 }

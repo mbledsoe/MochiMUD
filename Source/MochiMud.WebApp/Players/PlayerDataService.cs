@@ -11,6 +11,11 @@ namespace MochiMud.WebApp.Players
             playersById.TryAdd(player.Id, player);
         }
 
+        public IReadOnlyCollection<Player> GetPlayers()
+        {
+            return playersById.Values.ToArray();
+        }
+
         public IReadOnlyCollection<Player> GetPlayersInRoom(Guid roomId)
         {
             return playersById.Values

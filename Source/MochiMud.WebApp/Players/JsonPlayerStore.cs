@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using MochiMud.WebApp.Storage;
 
 namespace MochiMud.WebApp.Players
@@ -8,6 +9,7 @@ namespace MochiMud.WebApp.Players
         private static readonly JsonSerializerOptions SerializerOptions = new()
         {
             WriteIndented = true,
+            Converters = { new JsonStringEnumConverter() },
         };
 
         private readonly string storageDirectory;
@@ -21,7 +23,13 @@ namespace MochiMud.WebApp.Players
 
         public async Task SaveAsync(Player player, CancellationToken cancellationToken = default)
         {
-            var playerData = new PlayerData(player.Id, player.Name, player.MaximumHitPoints);
+            var playerData = new PlayerData(
+                player.Id,
+                player.Name,
+                player.MaximumHitPoints,
+                player.Class,
+                player.Level,
+                player.ExperiencePoints);
 
             var filePath = GetFilePath(player.Id);
             var tempFilePath = filePath + ".tmp";

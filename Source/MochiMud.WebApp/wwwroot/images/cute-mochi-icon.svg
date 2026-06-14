@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Cute mochi icon</title>
+  <desc id="desc">A rounded pink mochi with eyes, blush cheeks, and a smile.</desc>
+  <defs>
+    <radialGradient id="mochiGradient" cx="45%" cy="30%" r="75%">
+      <stop offset="0%" stop-color="#fff9f9"/>
+      <stop offset="68%" stop-color="#ffdfe4"/>
+      <stop offset="100%" stop-color="#ffc9d3"/>
+    </radialGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#000000" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="#252526"/>
+  <g filter="url(#softShadow)">
+    <path d="M20 73c0-29 18-49 44-49s44 20 44 49c0 22-16 31-44 31s-44-9-44-31z" fill="url(#mochiGradient)" stroke="#ffd0d8" stroke-width="1.5"/>
+    <ellipse cx="43" cy="74" rx="9" ry="6" fill="#ff9fb1" opacity="0.55"/>
+    <ellipse cx="85" cy="74" rx="9" ry="6" fill="#ff9fb1" opacity="0.55"/>
+    <circle cx="48" cy="62" r="7" fill="#24110d"/>
+    <circle cx="80" cy="62" r="7" fill="#24110d"/>
+    <circle cx="45" cy="58" r="2.5" fill="#ffffff"/>
+    <circle cx="77" cy="58" r="2.5" fill="#ffffff"/>
+    <path d="M56 73c3 8 13 8 16 0" fill="none" stroke="#24110d" stroke-width="4" stroke-linecap="round"/>
+  </g>
+</svg>

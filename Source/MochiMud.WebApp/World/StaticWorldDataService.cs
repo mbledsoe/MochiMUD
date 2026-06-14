@@ -2,21 +2,34 @@ namespace MochiMud.WebApp.World
 {
     public class StaticWorldDataService : IWorldDataService
     {
-        private static readonly IReadOnlyDictionary<Guid, Room> Rooms = CreateRooms();
+        private const string AreasManifestPath = "World/Data/areas.json";
+
+        private readonly IReadOnlyDictionary<Guid, Room> rooms;
+
+        public StaticWorldDataService(
+            JsonWorldAreaManifestLoader jsonWorldAreaManifestLoader,
+            JsonWorldAreaLoader jsonWorldAreaLoader)
+        {
+            rooms = CreateRooms(jsonWorldAreaManifestLoader, jsonWorldAreaLoader);
+        }
 
         public Task<Room?> GetRoomAsync(Guid roomId, CancellationToken cancellationToken = default)
         {
-            Rooms.TryGetValue(roomId, out var room);
+            rooms.TryGetValue(roomId, out var room);
 
             return Task.FromResult(room);
         }
 
-        private static IReadOnlyDictionary<Guid, Room> CreateRooms()
+        private static IReadOnlyDictionary<Guid, Room> CreateRooms(
+            JsonWorldAreaManifestLoader jsonWorldAreaManifestLoader,
+            JsonWorldAreaLoader jsonWorldAreaLoader)
         {
             var rooms = new Dictionary<Guid, Room>();
 
-            AddRooms(rooms, ChessboardWorldBuilder.CreateRooms());
-            AddRooms(rooms, HockesdenWorldBuilder.CreateRooms());
+            foreach (var areaPath in jsonWorldAreaManifestLoader.LoadAreas(AreasManifestPath))
+            {
+                AddRooms(rooms, jsonWorldAreaLoader.LoadRooms(areaPath));
+            }
 
             return rooms;
         }

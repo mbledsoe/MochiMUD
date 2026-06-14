@@ -29,7 +29,7 @@ namespace MochiMud.WebApp.Commands
         {
             logger.LogInformation("Handling recall command: {Command}", command);
 
-            player.CurrentRoomId = HockesdenWorldBuilder.TownSquareRoomId;
+            player.CurrentRoomId = WorldConstants.DefaultStartRoomId;
 
             await commandNotificationService.SendToPlayersInRoomExceptAsync(
                 player.CurrentRoomId,
@@ -37,7 +37,7 @@ namespace MochiMud.WebApp.Commands
                 $"A shimmering cloud suddenly appears and {player.Name} steps through!",
                 cancellationToken);
 
-            await client.SendMessageAsync("You recall to Hockesden Town Square.", cancellationToken);
+            await client.SendMessageAsync("You recall to safety.", cancellationToken);
             await roomPresenter.TrySendRoomAsync(player.CurrentRoomId, client, player, cancellationToken);
         }
     }

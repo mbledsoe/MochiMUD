@@ -26,7 +26,7 @@ namespace MochiMud.WebApp.Mobs
 
         private static Mob CreateMob(string name, char file, int rank)
         {
-            var mob = new Mob(name, ChessboardWorldBuilder.GetRoomId(file, rank));
+            var mob = new Mob(name, ChessboardRoomIds.GetRoomId(file, rank));
 
             if (name.EndsWith("King", StringComparison.Ordinal))
             {

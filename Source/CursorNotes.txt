@@ -120,3 +120,7 @@ Next time:
 - Failed appending natural exit descriptions to room descriptions.
 	- Adequately generated prose descriptions after additional guidance.
 - Excelled at adding aggressive mobs with very specific implementation guidance.  Integrated well with existing fight code.
+- Adequately extraced the Hockesden area to a json file
+- Absolutely comically failed at extracting the chessboard to a file.  
+	- Instead of explicitly storing the data, it stored data that allowed it to dynamically build the world but required code specific to chessboard area loading.
+	- When I asked it to create an "areas.json" list of worlds, it tacked on a "Loader" property to specify dynamic loaders for each type.

@@ -134,6 +134,8 @@ namespace MochiMud.WebApp
 
         public static IServiceCollection AddMudWorldServices(this IServiceCollection services)
         {
+            services.AddSingleton<JsonWorldAreaManifestLoader>();
+            services.AddSingleton<JsonWorldAreaLoader>();
             services.AddSingleton<IWorldDataService, StaticWorldDataService>();
 
             return services;

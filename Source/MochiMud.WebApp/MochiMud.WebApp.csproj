@@ -8,6 +8,9 @@
 
   <ItemGroup>
     <Content Include="Content\welcome-banner.txt" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="World\Data\areas.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="World\Data\chessboard.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="World\Data\hockesden.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

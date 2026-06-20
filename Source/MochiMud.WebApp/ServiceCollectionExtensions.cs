@@ -1,7 +1,4 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MochiMud.WebApp.Authentication;
 using MochiMud.WebApp.Commands;
@@ -21,6 +18,11 @@ namespace MochiMud.WebApp
     {
         public static IServiceCollection AddMudAuthServices(this IServiceCollection services)
         {
+            services.AddOptions<RegistrationOptions>()
+                .BindConfiguration(RegistrationOptions.SectionName)
+                .Validate(o => Guid.TryParse(o.InviteCode, out _), "Registration invite code must be a valid GUID.")
+                .ValidateOnStart();
+
             services.AddSingleton<IAccountStore, JsonAccountStore>();
             services.AddSingleton<IPasswordHasher, PasswordHasher>();
             services.AddSingleton<AccountService>();

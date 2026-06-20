@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Options;
 
 namespace MochiMud.WebApp.Authentication
 {
@@ -8,20 +9,34 @@ namespace MochiMud.WebApp.Authentication
 
         private readonly IAccountStore accountStore;
         private readonly IPasswordHasher passwordHasher;
+        private readonly RegistrationOptions registrationOptions;
 
-        public AccountService(IAccountStore accountStore, IPasswordHasher passwordHasher)
+        public AccountService(
+            IAccountStore accountStore,
+            IPasswordHasher passwordHasher,
+            IOptions<RegistrationOptions> registrationOptions)
         {
             this.accountStore = accountStore;
             this.passwordHasher = passwordHasher;
+            this.registrationOptions = registrationOptions.Value;
         }
 
         public async Task<RegisterResult> RegisterAsync(
             string username,
             string password,
+            string inviteCode,
             CancellationToken cancellationToken = default)
         {
             username = (username ?? string.Empty).Trim();
             password ??= string.Empty;
+            inviteCode = (inviteCode ?? string.Empty).Trim();
+
+            if (!Guid.TryParse(inviteCode, out var suppliedInviteCode)
+                || !Guid.TryParse(registrationOptions.InviteCode, out var expectedInviteCode)
+                || suppliedInviteCode != expectedInviteCode)
+            {
+                return new RegisterResult(RegisterOutcome.InvalidInvite, null);
+            }
 
             if (!UsernameRegex().IsMatch(username) || password.Length < MinPasswordLength)
             {
@@ -79,6 +94,7 @@ namespace MochiMud.WebApp.Authentication
         Success,
         UsernameTaken,
         Invalid,
+        InvalidInvite,
     }
 
     public sealed record RegisterResult(RegisterOutcome Outcome, Account? Account);

@@ -44,6 +44,10 @@
                 Password
                 <input id="registerPassword" name="password" type="password" autocomplete="new-password" required>
             </label>
+            <label>
+                Invite code
+                <input id="registerInvite" name="inviteCode" type="text" autocomplete="off" required>
+            </label>
             <p class="hint">Username: 3-20 letters, digits, or underscore. Password: at least 8 characters.</p>
             <button type="submit">Create account</button>
         </form>
@@ -81,7 +85,8 @@
             const formData = new FormData(form);
             const payload = {
                 username: (formData.get("username") || "").trim(),
-                password: formData.get("password") || ""
+                password: formData.get("password") || "",
+                inviteCode: (formData.get("inviteCode") || "").trim()
             };
 
             const submitButton = form.querySelector("button[type=submit]");

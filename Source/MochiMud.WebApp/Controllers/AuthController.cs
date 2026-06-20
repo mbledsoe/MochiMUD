@@ -21,7 +21,11 @@ namespace MochiMud.WebApp.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterRequest request, CancellationToken cancellationToken)
         {
-            var result = await accountService.RegisterAsync(request.Username, request.Password, cancellationToken);
+            var result = await accountService.RegisterAsync(
+                request.Username,
+                request.Password,
+                request.InviteCode,
+                cancellationToken);
 
             switch (result.Outcome)
             {
@@ -30,6 +34,8 @@ namespace MochiMud.WebApp.Controllers
                     return Ok();
                 case RegisterOutcome.UsernameTaken:
                     return Conflict("Username is already taken.");
+                case RegisterOutcome.InvalidInvite:
+                    return BadRequest("Invalid invite code.");
                 default:
                     return BadRequest(
                         "Username must be 3-20 characters (letters, digits, underscore) and password at least 8 characters.");
@@ -84,7 +90,7 @@ namespace MochiMud.WebApp.Controllers
         }
     }
 
-    public sealed record RegisterRequest(string Username, string Password);
+    public sealed record RegisterRequest(string Username, string Password, string InviteCode);
 
     public sealed record LoginRequest(string Username, string Password);
 }

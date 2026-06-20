@@ -138,3 +138,25 @@ Next time:
 6/19/2026
 - Adequately added a leveling system but had to be refactored to allow "You leveled up!" message to be sent to the player.
 - Adequately added logic for calculating experience awards on mob death during fights.
+- Adequately generated new rooms when I asked it to move the guilds west (or east) and add new rooms in the empty spaces.
+	- Failed to connect the guilds back to main street.
+	- Adequately connected them after guidance.
+- Failed when given specific instructions for creating a grass path around the temple.  Move rooms that were inside the temple to exterior rooms beyond the grass path.
+	- Failed again when I tried to describe it more explicitly
+	- Incredibly frustrating try to instruct Cursor to build a grass path around the temple.  Its changes caused a startup error with an infinite loop twice.
+	- At this point, I'm giving up doing this grass path tonight.
+
+Summary for 6/19/2026
+I didn't make much progress and I dealt with several failures from cursor.  Early revisions involving fight logic were promising, but it could not manage
+adding a grass path around the temple.  It created several non sensical outputs before I gave it room by room instructions and even then I still had issues.
+Tomorrow I will have to look at the room loading code and add the rooms by hand.  Cursor has been spinning its wheels for the last 10 minutes trying to fix
+whatever bug is preventing startup, I give up.
+
+6/20/2026
+- I'm noticing some areas of the code which I didn't adequately review because, such as some of the newer methods in FightService.  I will need to stop today
+and do a full audit of the code to ensure there haven't been other changes that went unnoticed.
+- My API usage on the $20 plan is already at 93% after 5 development sessions.  My overall usage is at 50%.
+- Using Opus 4.8, it adequately created rooms around the temple but I had to add them one-by-one.
+- Failed to add an invite code concept to account registration in a new agent.  It simply never responded with a plan.
+	- Excelled at creating this invite code system in my previous agent window using Opus 4.8
+- Switched back to auto mode.  I'm not sure if this will save on API usage but I'm hoping it does.

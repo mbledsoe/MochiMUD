@@ -23,11 +23,87 @@
   {
     "Id": "f3519f3f-3cb4-4e18-967b-221936c4d128",
     "Title": "West Main Street",
-    "Description": "Main Street continues west past the sturdy halls of Hockesden's martial and sacred guilds. The town square lies back to the east, with guild doors opening to the north and south.",
+    "Description": "Main Street continues west past shopfronts and painted signs. The town square lies back to the east, with a cheerful confectioner's door to the north and a weapons dealer's hall to the south. The street carries on further west toward the guild halls.",
     "Exits": [
       {
         "Direction": "East",
         "DestinationRoomId": "6b57b778-87c7-4f24-9f53-645257db4b68"
+      },
+      {
+        "Direction": "West",
+        "DestinationRoomId": "b2a7803b-5a6c-4011-be86-0a924a5c6270"
+      },
+      {
+        "Direction": "North",
+        "DestinationRoomId": "c3e8912a-4b7d-4f21-9e86-1a024b6d7381"
+      },
+      {
+        "Direction": "South",
+        "DestinationRoomId": "d4f9a013-5c8e-4022-af97-2b135c7e8492"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "6a2dca48-2730-4947-bc01-b52a25711f95",
+    "Title": "East Main Street",
+    "Description": "Main Street continues east past mixed shopfronts and a boarded-up facade. The town square lies back to the west, with a curio dealer's window to the north and a shuttered storefront to the south. The street carries on further east toward the guild halls.",
+    "Exits": [
+      {
+        "Direction": "West",
+        "DestinationRoomId": "6b57b778-87c7-4f24-9f53-645257db4b68"
+      },
+      {
+        "Direction": "East",
+        "DestinationRoomId": "a7c8914c-6b7d-4122-cf97-1b035b6d7382"
+      },
+      {
+        "Direction": "North",
+        "DestinationRoomId": "e508b124-6d9f-4133-b0a8-3c246d8f9503"
+      },
+      {
+        "Direction": "South",
+        "DestinationRoomId": "f619c235-7ea0-4244-c1b9-4d357e0a0614"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "c3e8912a-4b7d-4f21-9e86-1a024b6d7381",
+    "Title": "Mochi Shop",
+    "Description": "Soft rice flour and sweet bean paste scent the Mochi Shop. Colorful wagashi line polished counters, and the door back to West Main Street stands to the south.",
+    "Exits": [
+      {
+        "Direction": "South",
+        "DestinationRoomId": "f3519f3f-3cb4-4e18-967b-221936c4d128"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "d4f9a013-5c8e-4022-af97-2b135c7e8492",
+    "Title": "Weapons Shop",
+    "Description": "Blades, polearms, and leather harness hang from pegboards in the Weapons Shop. The clang of a hammer on steel rings from the back room, and the door back to West Main Street stands to the north.",
+    "Exits": [
+      {
+        "Direction": "North",
+        "DestinationRoomId": "f3519f3f-3cb4-4e18-967b-221936c4d128"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "b2a7803b-5a6c-4011-be86-0a924a5c6270",
+    "Title": "Far West Main Street",
+    "Description": "Main Street runs westward past the sturdy halls of Hockesden's martial and sacred guilds. The shop-lined stretch of the street lies back to the east, with guild doors opening to the north and south. The road ends ahead at the west gate.",
+    "Exits": [
+      {
+        "Direction": "East",
+        "DestinationRoomId": "f3519f3f-3cb4-4e18-967b-221936c4d128"
+      },
+      {
+        "Direction": "West",
+        "DestinationRoomId": "c8d9025d-7eb1-4355-d0c8-2c468e1b8493"
       },
       {
         "Direction": "North",
@@ -41,13 +117,77 @@
     "Objects": []
   },
   {
-    "Id": "6a2dca48-2730-4947-bc01-b52a25711f95",
-    "Title": "East Main Street",
-    "Description": "Main Street continues east past narrow guild halls marked by arcane signs and shadowed doorways. The town square lies back to the west, with guild doors opening to the north and south.",
+    "Id": "c8d9025d-7eb1-4355-d0c8-2c468e1b8493",
+    "Title": "West Gate",
+    "Description": "Heavy timber gates and a stone arch mark the western edge of Hockesden. The road back into town lies to the east along Main Street, while open country waits beyond the gate.",
+    "Exits": [
+      {
+        "Direction": "East",
+        "DestinationRoomId": "b2a7803b-5a6c-4011-be86-0a924a5c6270"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "bba8a148-370f-4d28-9973-c9c9ec5c9257",
+    "Title": "Warrior Guild",
+    "Description": "Weapon racks and scarred practice posts fill the Warrior Guild. The door back to Far West Main Street stands to the south.",
+    "Exits": [
+      {
+        "Direction": "South",
+        "DestinationRoomId": "b2a7803b-5a6c-4011-be86-0a924a5c6270"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "7f948de0-1a9d-4778-bab7-9f045311cead",
+    "Title": "Cleric Guild",
+    "Description": "Quiet benches and polished icons line the Cleric Guild. The door back to Far West Main Street stands to the north.",
+    "Exits": [
+      {
+        "Direction": "North",
+        "DestinationRoomId": "b2a7803b-5a6c-4011-be86-0a924a5c6270"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "e508b124-6d9f-4133-b0a8-3c246d8f9503",
+    "Title": "Store of Antique Curiosities",
+    "Description": "Dusty shelves and glass cases display antique curiosities from half-forgotten travels. The door back to East Main Street stands to the south.",
+    "Exits": [
+      {
+        "Direction": "South",
+        "DestinationRoomId": "6a2dca48-2730-4947-bc01-b52a25711f95"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "f619c235-7ea0-4244-c1b9-4d357e0a0614",
+    "Title": "Boarded Storefront",
+    "Description": "A closed store stares out with boarded windows and a nailed-shut door. Wind rattles the planks, and the only way back is north toward East Main Street.",
+    "Exits": [
+      {
+        "Direction": "North",
+        "DestinationRoomId": "6a2dca48-2730-4947-bc01-b52a25711f95"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "a7c8914c-6b7d-4122-cf97-1b035b6d7382",
+    "Title": "Far East Main Street",
+    "Description": "Main Street runs eastward past narrow guild halls marked by arcane signs and shadowed doorways. The shop-lined stretch of the street lies back to the west, with guild doors opening to the north and south. The road ends ahead at the east gate.",
     "Exits": [
       {
         "Direction": "West",
-        "DestinationRoomId": "6b57b778-87c7-4f24-9f53-645257db4b68"
+        "DestinationRoomId": "6a2dca48-2730-4947-bc01-b52a25711f95"
+      },
+      {
+        "Direction": "East",
+        "DestinationRoomId": "d9ea136e-8fc2-4466-e1d9-3d579f2c9504"
       },
       {
         "Direction": "North",
@@ -61,25 +201,13 @@
     "Objects": []
   },
   {
-    "Id": "bba8a148-370f-4d28-9973-c9c9ec5c9257",
-    "Title": "Warrior Guild",
-    "Description": "Weapon racks and scarred practice posts fill the Warrior Guild. The door back to West Main Street stands to the south.",
+    "Id": "d9ea136e-8fc2-4466-e1d9-3d579f2c9504",
+    "Title": "East Gate",
+    "Description": "Heavy timber gates and a stone arch mark the eastern edge of Hockesden. The road back into town lies to the west along Main Street, while open country waits beyond the gate.",
     "Exits": [
       {
-        "Direction": "South",
-        "DestinationRoomId": "f3519f3f-3cb4-4e18-967b-221936c4d128"
-      }
-    ],
-    "Objects": []
-  },
-  {
-    "Id": "7f948de0-1a9d-4778-bab7-9f045311cead",
-    "Title": "Cleric Guild",
-    "Description": "Quiet benches and polished icons line the Cleric Guild. The door back to West Main Street stands to the north.",
-    "Exits": [
-      {
-        "Direction": "North",
-        "DestinationRoomId": "f3519f3f-3cb4-4e18-967b-221936c4d128"
+        "Direction": "West",
+        "DestinationRoomId": "a7c8914c-6b7d-4122-cf97-1b035b6d7382"
       }
     ],
     "Objects": []
@@ -87,11 +215,11 @@
   {
     "Id": "4f9b48c9-3c5f-4de2-b13c-0ad4cf2ad066",
     "Title": "Mage Guild",
-    "Description": "Shelves of scrolls and faintly glowing lamps crowd the Mage Guild. The door back to East Main Street stands to the south.",
+    "Description": "Shelves of scrolls and faintly glowing lamps crowd the Mage Guild. The door back to Far East Main Street stands to the south.",
     "Exits": [
       {
         "Direction": "South",
-        "DestinationRoomId": "6a2dca48-2730-4947-bc01-b52a25711f95"
+        "DestinationRoomId": "a7c8914c-6b7d-4122-cf97-1b035b6d7382"
       }
     ],
     "Objects": []
@@ -99,11 +227,11 @@
   {
     "Id": "65cfac21-09f4-45f3-81d0-c4121b54258c",
     "Title": "Thieves Guild",
-    "Description": "The Thieves Guild is dim, narrow, and full of carefully watched corners. The door back to East Main Street stands to the north.",
+    "Description": "The Thieves Guild is dim, narrow, and full of carefully watched corners. The door back to Far East Main Street stands to the north.",
     "Exits": [
       {
         "Direction": "North",
-        "DestinationRoomId": "6a2dca48-2730-4947-bc01-b52a25711f95"
+        "DestinationRoomId": "a7c8914c-6b7d-4122-cf97-1b035b6d7382"
       }
     ],
     "Objects": []
@@ -119,19 +247,256 @@
       },
       {
         "Direction": "North",
+        "DestinationRoomId": "8e4f2a1b-6c3d-4f5e-9a8b-7c6d5e4f3a2b"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "8e4f2a1b-6c3d-4f5e-9a8b-7c6d5e4f3a2b",
+    "Title": "Outside the Temple Entrance",
+    "Description": "You stand outside the temple entrance on broad flagstones before the Temple of the White Spire. The white spire rises overhead, and stone steps descend to the south. A grassy path leads west along a stone wall that encloses the temple grounds, and another stretch of the path runs east.",
+    "Exits": [
+      {
+        "Direction": "South",
+        "DestinationRoomId": "1aca0620-7565-4cec-98bd-d85bf8ea0299"
+      },
+      {
+        "Direction": "North",
         "DestinationRoomId": "fd71fda6-cc24-4965-a383-cdbf5340fb17"
+      },
+      {
+        "Direction": "West",
+        "DestinationRoomId": "b2d1f3a4-1c2e-4d5f-8a9b-0c1d2e3f4a5b"
+      },
+      {
+        "Direction": "East",
+        "DestinationRoomId": "b4d3f5a6-3c4e-4dbf-a0b1-c2d3e4f5a6b7"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "b2d1f3a4-1c2e-4d5f-8a9b-0c1d2e3f4a5b",
+    "Title": "Grass Path Along the South Wall",
+    "Description": "The grassy path runs along the inside of the stone wall enclosing the temple grounds. The flagstones outside the temple entrance lie to the east, and the southwest corner of the grounds lies to the west.",
+    "Exits": [
+      {
+        "Direction": "East",
+        "DestinationRoomId": "8e4f2a1b-6c3d-4f5e-9a8b-7c6d5e4f3a2b"
+      },
+      {
+        "Direction": "West",
+        "DestinationRoomId": "c3e2a4b5-2d3f-4e6a-9b0c-1d2e3f4a5b6c"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "c3e2a4b5-2d3f-4e6a-9b0c-1d2e3f4a5b6c",
+    "Title": "Southwest Corner of the Temple Grounds",
+    "Description": "You stand in the southwest corner of the temple grounds, where the stone wall turns a sharp corner and rises on two sides. The grassy path follows the western wall north, and grass stretches back east along the wall toward the temple entrance.",
+    "Exits": [
+      {
+        "Direction": "East",
+        "DestinationRoomId": "b2d1f3a4-1c2e-4d5f-8a9b-0c1d2e3f4a5b"
+      },
+      {
+        "Direction": "North",
+        "DestinationRoomId": "d4f3b5c6-3e4a-4f7b-0c1d-2e3f4a5b6c7d"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "d4f3b5c6-3e4a-4f7b-0c1d-2e3f4a5b6c7d",
+    "Title": "Grass Path Along the West Wall",
+    "Description": "The grassy path runs north along the inside of the stone wall enclosing the temple grounds. The path continues north, and the southwest corner of the grounds lies back to the south.",
+    "Exits": [
+      {
+        "Direction": "South",
+        "DestinationRoomId": "c3e2a4b5-2d3f-4e6a-9b0c-1d2e3f4a5b6c"
+      },
+      {
+        "Direction": "North",
+        "DestinationRoomId": "e5a4c6d7-4f5b-4a8c-1d2e-3f4a5b6c7d8e"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "e5a4c6d7-4f5b-4a8c-1d2e-3f4a5b6c7d8e",
+    "Title": "Grass Path Along the West Wall",
+    "Description": "The grassy path continues north beside the stone wall that encloses the temple grounds. The wall rises steadily to the west, the path runs back south toward the southwest corner, and the northwest corner of the grounds lies ahead to the north.",
+    "Exits": [
+      {
+        "Direction": "South",
+        "DestinationRoomId": "d4f3b5c6-3e4a-4f7b-0c1d-2e3f4a5b6c7d"
+      },
+      {
+        "Direction": "North",
+        "DestinationRoomId": "f6b5d7e8-5a6c-4b9d-2e3f-4a5b6c7d8e9f"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "f6b5d7e8-5a6c-4b9d-2e3f-4a5b6c7d8e9f",
+    "Title": "Northwest Corner of the Temple Grounds",
+    "Description": "You stand in the northwest corner of the temple grounds, where the stone wall turns a sharp corner and rises on two sides. The grassy path runs back south along the western wall toward the southwest corner, and continues east along the northern wall.",
+    "Exits": [
+      {
+        "Direction": "South",
+        "DestinationRoomId": "e5a4c6d7-4f5b-4a8c-1d2e-3f4a5b6c7d8e"
+      },
+      {
+        "Direction": "East",
+        "DestinationRoomId": "a7c6e8f9-6b7d-4cae-3f4a-5b6c7d8e9fa0"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "a7c6e8f9-6b7d-4cae-3f4a-5b6c7d8e9fa0",
+    "Title": "Grass Path Along the North Wall",
+    "Description": "The grassy path runs east along the inside of the stone wall that encloses the temple grounds. The path continues east, and the northwest corner of the grounds lies back to the west.",
+    "Exits": [
+      {
+        "Direction": "West",
+        "DestinationRoomId": "f6b5d7e8-5a6c-4b9d-2e3f-4a5b6c7d8e9f"
+      },
+      {
+        "Direction": "East",
+        "DestinationRoomId": "b8d7f9a0-7c8e-4dbf-4a5b-6c7d8e9fa0b1"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "b8d7f9a0-7c8e-4dbf-4a5b-6c7d8e9fa0b1",
+    "Title": "Grass Path Along the North Wall",
+    "Description": "The grassy path continues east beside the stone wall enclosing the temple grounds. A wrought iron gate is set into the wall here, leading north out of the grounds, and the path runs west toward the northwest corner and east along the wall.",
+    "Exits": [
+      {
+        "Direction": "West",
+        "DestinationRoomId": "a7c6e8f9-6b7d-4cae-3f4a-5b6c7d8e9fa0"
+      },
+      {
+        "Direction": "East",
+        "DestinationRoomId": "c9e8a0b1-8d9f-4eca-5b6c-7d8e9fa0b1c2"
+      }
+    ],
+    "Objects": [
+      {
+        "Name": "gate",
+        "Description": "A wrought iron gate is set into the stone wall, leading north out of the temple grounds."
+      }
+    ]
+  },
+  {
+    "Id": "c9e8a0b1-8d9f-4eca-5b6c-7d8e9fa0b1c2",
+    "Title": "Grass Path Along the North Wall",
+    "Description": "The grassy path runs east along the inside of the stone wall enclosing the temple grounds. The path continues east toward the northeast corner of the grounds, and the wrought iron gate lies back to the west.",
+    "Exits": [
+      {
+        "Direction": "West",
+        "DestinationRoomId": "b8d7f9a0-7c8e-4dbf-4a5b-6c7d8e9fa0b1"
+      },
+      {
+        "Direction": "East",
+        "DestinationRoomId": "d0f9b1c2-9e0a-4fdb-6c7d-8e9fa0b1c2d3"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "d0f9b1c2-9e0a-4fdb-6c7d-8e9fa0b1c2d3",
+    "Title": "Northeast Corner of the Temple Grounds",
+    "Description": "You stand in the northeast corner of the temple grounds, where the stone wall turns a sharp corner and rises on two sides. The grassy path runs back west along the northern wall toward the wrought iron gate, and continues south along the eastern wall.",
+    "Exits": [
+      {
+        "Direction": "West",
+        "DestinationRoomId": "c9e8a0b1-8d9f-4eca-5b6c-7d8e9fa0b1c2"
+      },
+      {
+        "Direction": "South",
+        "DestinationRoomId": "e1a0c2d3-0f1b-4aec-7d8e-9fa0b1c2d3e4"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "e1a0c2d3-0f1b-4aec-7d8e-9fa0b1c2d3e4",
+    "Title": "Grass Path Along the East Wall",
+    "Description": "The grassy path runs south along the inside of the stone wall enclosing the temple grounds. The path continues south, and the northeast corner of the grounds lies back to the north.",
+    "Exits": [
+      {
+        "Direction": "North",
+        "DestinationRoomId": "d0f9b1c2-9e0a-4fdb-6c7d-8e9fa0b1c2d3"
+      },
+      {
+        "Direction": "South",
+        "DestinationRoomId": "f2b1d3e4-1a2c-4bfd-8e9f-a0b1c2d3e4f5"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "f2b1d3e4-1a2c-4bfd-8e9f-a0b1c2d3e4f5",
+    "Title": "Grass Path Along the East Wall",
+    "Description": "The grassy path continues south beside the stone wall that encloses the temple grounds. The wall rises steadily to the east, the path runs back north toward the northeast corner, and the southeast corner of the grounds lies ahead to the south.",
+    "Exits": [
+      {
+        "Direction": "North",
+        "DestinationRoomId": "e1a0c2d3-0f1b-4aec-7d8e-9fa0b1c2d3e4"
+      },
+      {
+        "Direction": "South",
+        "DestinationRoomId": "a3c2e4f5-2b3d-4cae-9fa0-b1c2d3e4f5a6"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "a3c2e4f5-2b3d-4cae-9fa0-b1c2d3e4f5a6",
+    "Title": "Southeast Corner of the Temple Grounds",
+    "Description": "You stand in the southeast corner of the temple grounds, where the stone wall turns a sharp corner and rises on two sides. The grassy path runs back north along the eastern wall toward the northeast corner, and continues west along the southern wall.",
+    "Exits": [
+      {
+        "Direction": "North",
+        "DestinationRoomId": "f2b1d3e4-1a2c-4bfd-8e9f-a0b1c2d3e4f5"
+      },
+      {
+        "Direction": "West",
+        "DestinationRoomId": "b4d3f5a6-3c4e-4dbf-a0b1-c2d3e4f5a6b7"
+      }
+    ],
+    "Objects": []
+  },
+  {
+    "Id": "b4d3f5a6-3c4e-4dbf-a0b1-c2d3e4f5a6b7",
+    "Title": "Grass Path Along the South Wall",
+    "Description": "The grassy path runs along the inside of the stone wall enclosing the temple grounds. The flagstones outside the temple entrance lie to the west, and the southeast corner of the grounds lies to the east.",
+    "Exits": [
+      {
+        "Direction": "East",
+        "DestinationRoomId": "a3c2e4f5-2b3d-4cae-9fa0-b1c2d3e4f5a6"
+      },
+      {
+        "Direction": "West",
+        "DestinationRoomId": "8e4f2a1b-6c3d-4f5e-9a8b-7c6d5e4f3a2b"
       }
     ],
     "Objects": []
   },
   {
     "Id": "fd71fda6-cc24-4965-a383-cdbf5340fb17",
-    "Title": "Temple of the White Spire",
-    "Description": "The temple is cool and bright beneath the white spire rising overhead. The steps descend behind you, and an anteroom waits deeper within the temple.",
+    "Title": "Temple Anteroom",
+    "Description": "A small anteroom waits just within the temple, quiet and whitewashed. The temple grounds lie back to the south, and the nave beneath the white spire opens deeper to the north.",
     "Exits": [
       {
         "Direction": "South",
-        "DestinationRoomId": "1aca0620-7565-4cec-98bd-d85bf8ea0299"
+        "DestinationRoomId": "8e4f2a1b-6c3d-4f5e-9a8b-7c6d5e4f3a2b"
       },
       {
         "Direction": "North",
@@ -142,8 +507,8 @@
   },
   {
     "Id": "df8ff9a2-730d-47f4-8329-2c11e9d2e176",
-    "Title": "Temple Anteroom",
-    "Description": "A small anteroom waits beyond the temple nave, quiet and whitewashed. The nave lies back to the south, and a side passage opens toward the portal gallery.",
+    "Title": "Temple of the White Spire",
+    "Description": "The temple is cool and bright beneath the white spire rising overhead. The anteroom lies back to the south, and a side passage opens west toward the portal gallery.",
     "Exits": [
       {
         "Direction": "South",
@@ -159,7 +524,7 @@
   {
     "Id": "7db66507-6adf-476b-a2fe-3bed97789dd8",
     "Title": "Portal Gallery",
-    "Description": "Ancient portals shimmer along the walls, each opening onto a different world. One portal glows to the north, while the anteroom remains safely to the east.",
+    "Description": "Ancient portals shimmer along the walls, each opening onto a different world. One portal glows to the north, while the temple nave beneath the white spire remains safely to the east.",
     "Exits": [
       {
         "Direction": "East",

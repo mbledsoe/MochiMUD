@@ -73,18 +73,18 @@
   {"Id":"1f313c8a-5f07-4caa-9000-000000004808","Title":"Square H8","Description":"This is a dark square.","Exits":[{"Direction":"South","DestinationRoomId":"1f313c8a-5f07-4caa-9000-000000004807"},{"Direction":"West","DestinationRoomId":"1f313c8a-5f07-4caa-9000-000000004708"}],"Objects":[]}
   ],
   "MobDefinitions": [
-    {"Id":"white-rook","Name":"White Rook","BareHandDamage":{"DiceCount":1,"Sides":2},"IsAggressive":false},
-    {"Id":"white-knight","Name":"White Knight","BareHandDamage":{"DiceCount":1,"Sides":2},"IsAggressive":false},
-    {"Id":"white-bishop","Name":"White Bishop","BareHandDamage":{"DiceCount":1,"Sides":2},"IsAggressive":false},
-    {"Id":"white-queen","Name":"White Queen","BareHandDamage":{"DiceCount":5,"Sides":50},"IsAggressive":true},
-    {"Id":"white-king","Name":"White King","BareHandDamage":{"DiceCount":5,"Sides":5},"IsAggressive":true},
-    {"Id":"white-pawn","Name":"White Pawn","BareHandDamage":{"DiceCount":1,"Sides":2},"IsAggressive":false},
-    {"Id":"black-rook","Name":"Black Rook","BareHandDamage":{"DiceCount":1,"Sides":2},"IsAggressive":false},
-    {"Id":"black-knight","Name":"Black Knight","BareHandDamage":{"DiceCount":1,"Sides":2},"IsAggressive":false},
-    {"Id":"black-bishop","Name":"Black Bishop","BareHandDamage":{"DiceCount":1,"Sides":2},"IsAggressive":false},
-    {"Id":"black-queen","Name":"Black Queen","BareHandDamage":{"DiceCount":5,"Sides":50},"IsAggressive":true},
-    {"Id":"black-king","Name":"Black King","BareHandDamage":{"DiceCount":5,"Sides":5},"IsAggressive":true},
-    {"Id":"black-pawn","Name":"Black Pawn","BareHandDamage":{"DiceCount":1,"Sides":2},"IsAggressive":false}
+    {"Id":"white-rook","Name":"White Rook","BareHandDamage":{"DiceCount":1,"Sides":2},"IsAggressive":false,"Level":5,"ExperiencePoints":250},
+    {"Id":"white-knight","Name":"White Knight","BareHandDamage":{"DiceCount":1,"Sides":2},"IsAggressive":false,"Level":4,"ExperiencePoints":200},
+    {"Id":"white-bishop","Name":"White Bishop","BareHandDamage":{"DiceCount":1,"Sides":2},"IsAggressive":false,"Level":4,"ExperiencePoints":200},
+    {"Id":"white-queen","Name":"White Queen","BareHandDamage":{"DiceCount":5,"Sides":50},"IsAggressive":true,"Level":10,"ExperiencePoints":500},
+    {"Id":"white-king","Name":"White King","BareHandDamage":{"DiceCount":5,"Sides":5},"IsAggressive":true,"Level":10,"ExperiencePoints":500},
+    {"Id":"white-pawn","Name":"White Pawn","BareHandDamage":{"DiceCount":1,"Sides":2},"IsAggressive":false,"Level":1,"ExperiencePoints":50},
+    {"Id":"black-rook","Name":"Black Rook","BareHandDamage":{"DiceCount":1,"Sides":2},"IsAggressive":false,"Level":5,"ExperiencePoints":250},
+    {"Id":"black-knight","Name":"Black Knight","BareHandDamage":{"DiceCount":1,"Sides":2},"IsAggressive":false,"Level":4,"ExperiencePoints":200},
+    {"Id":"black-bishop","Name":"Black Bishop","BareHandDamage":{"DiceCount":1,"Sides":2},"IsAggressive":false,"Level":4,"ExperiencePoints":200},
+    {"Id":"black-queen","Name":"Black Queen","BareHandDamage":{"DiceCount":5,"Sides":50},"IsAggressive":true,"Level":10,"ExperiencePoints":500},
+    {"Id":"black-king","Name":"Black King","BareHandDamage":{"DiceCount":5,"Sides":5},"IsAggressive":true,"Level":10,"ExperiencePoints":500},
+    {"Id":"black-pawn","Name":"Black Pawn","BareHandDamage":{"DiceCount":1,"Sides":2},"IsAggressive":false,"Level":1,"ExperiencePoints":50}
   ],
   "MobSpawns": [
     {"MobDefinitionId":"white-rook","RoomId":"1f313c8a-5f07-4caa-9000-000000004101"},

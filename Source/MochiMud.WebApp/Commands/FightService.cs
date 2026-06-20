@@ -10,6 +10,7 @@ namespace MochiMud.WebApp.Commands
         private static readonly TimeSpan RoundDelay = TimeSpan.FromSeconds(2);
 
         private readonly ICommandNotificationService commandNotificationService;
+        private readonly ILevelingService levelingService;
         private readonly ILogger<FightService> logger;
         private readonly List<ActiveFight> activeFights = new();
         private readonly IMobDataService mobDataService;
@@ -18,12 +19,14 @@ namespace MochiMud.WebApp.Commands
 
         public FightService(
             ICommandNotificationService commandNotificationService,
+            ILevelingService levelingService,
             ILogger<FightService> logger,
             IMobDataService mobDataService,
             IPlayerDataService playerDataService,
             PlayerGroupService playerGroupService)
         {
             this.commandNotificationService = commandNotificationService;
+            this.levelingService = levelingService;
             this.logger = logger;
             this.mobDataService = mobDataService;
             this.playerDataService = playerDataService;
@@ -266,6 +269,17 @@ namespace MochiMud.WebApp.Commands
                     activeFight.Participants,
                     $"You killed the {activeFight.Mob.Name}!",
                     cancellationToken);
+
+                var participantCount = activeFight.Participants.Count;
+
+                foreach (var player in activeFight.Participants)
+                {
+                    await levelingService.AwardMobKillExperienceAsync(
+                        player,
+                        activeFight.Mob,
+                        participantCount,
+                        cancellationToken);
+                }
             }
             catch (Exception exception)
             {

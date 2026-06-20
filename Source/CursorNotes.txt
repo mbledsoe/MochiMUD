@@ -134,3 +134,7 @@ Next time:
 	- Failed to separate the configuration for local file store from azure blob store.  Included "connection string" in a generic "file storage" options class.
 - Failed to create a default constructor when Room was moved to a json file.
 	- Adequately corrected the issue after being given the exception message.
+
+6/19/2026
+- Adequately added a leveling system but had to be refactored to allow "You leveled up!" message to be sent to the player.
+- Adequately added logic for calculating experience awards on mob death during fights.

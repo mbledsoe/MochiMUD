@@ -67,6 +67,38 @@ namespace MochiMud.WebApp.Players
 
         public Guid CurrentRoomId { get; set; }
 
+        public int AddExperience(int amount)
+        {
+            if (amount <= 0 || Level >= MaximumLevel)
+            {
+                if (Level >= MaximumLevel)
+                {
+                    ExperiencePoints = 0;
+                }
+
+                return 0;
+            }
+
+            ExperiencePoints += amount;
+
+            var levelsGained = 0;
+
+            while (Level < MaximumLevel &&
+                   ExperiencePoints >= ExperienceTable.XpToNextLevel(Level))
+            {
+                ExperiencePoints -= ExperienceTable.XpToNextLevel(Level);
+                Level += 1;
+                levelsGained += 1;
+            }
+
+            if (Level >= MaximumLevel)
+            {
+                ExperiencePoints = 0;
+            }
+
+            return levelsGained;
+        }
+
         public static Player FromData(PlayerData data)
         {
             return new Player(

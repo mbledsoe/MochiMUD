@@ -71,6 +71,8 @@ namespace MochiMud.WebApp.World
             {
                 BareHandDamage = mobDefinition.BareHandDamage,
                 IsAggressive = mobDefinition.IsAggressive,
+                Level = mobDefinition.Level,
+                ExperiencePoints = mobDefinition.ExperiencePoints,
             };
 
             return mob;

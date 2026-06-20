@@ -110,6 +110,7 @@ namespace MochiMud.WebApp
         {
             services.AddSingleton<IPlayerDataService, PlayerDataService>();
             services.AddSingleton<IPlayerStore, JsonPlayerStore>();
+            services.AddSingleton<ILevelingService, LevelingService>();
             services.AddSingleton<PlayerConnectionRegistry>();
             services.AddSingleton<PlayerCreationService>();
             services.AddSingleton<PlayerGroupService>();

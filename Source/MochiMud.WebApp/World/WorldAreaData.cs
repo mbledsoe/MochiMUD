@@ -11,7 +11,9 @@ namespace MochiMud.WebApp.World
         string Id,
         string Name,
         DiceSpecification BareHandDamage,
-        bool IsAggressive);
+        bool IsAggressive,
+        int Level = 1,
+        int ExperiencePoints = 100);
 
     public sealed record MobSpawnData(
         string MobDefinitionId,

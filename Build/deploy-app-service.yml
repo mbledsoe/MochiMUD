@@ -20,7 +20,7 @@ steps:
 - task: AzureRmWebAppDeployment@5
   inputs:
     ConnectionType: 'AzureRM'
-    azureSubscription: ${{ variables.AzureSubscription }}
+    azureSubscription: MochiMudServiceConnection
     appType: 'webAppLinux'
     WebAppName: $(AppServiceName)
     packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'

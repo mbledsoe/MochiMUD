@@ -1,4 +1,6 @@
+using MochiMud.Core;
 using MochiMud.WebApp.Hubs;
+using MochiMud.WebApp.Services;
 
 namespace MochiMud.WebApp
 {
@@ -7,6 +9,10 @@ namespace MochiMud.WebApp
 		public static void Main(string[] args)
 		{
 			var builder = WebApplication.CreateBuilder(args);
+
+			builder.Services.AddMochiMudCore();
+			builder.Services.AddMochiMudWebApp();
+
 			builder.Services.AddSignalR();
 			
 			var app = builder.Build();

@@ -67,6 +67,15 @@ body {
     font-family: Consolas, Courier New, Courier, monospace;
 }
 
+input {
+    color: #f1f1f1;
+    border: none;
+    background: none;
+    padding: 20px;
+    font-family: Consolas, Courier New, Courier, monospace;
+    font-size: 100%;
+}
+
 header {
     background-color: #111111;
 }
@@ -97,8 +106,29 @@ main {
     min-height: 900px;
     box-shadow: 0px 0px 10px #1a1a1a;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
 }
 
+#input {
+    background-color: #262626;
+    box-shadow: 0px 0px 10px #1a1a1a;    
+    margin: 10px 0px 0px 0px;
+    display: flex;
+}
+
+#textInput {
+    display: block;
+    width: 100%;
+    border: none;
+    background: none;
+    padding: 20px;
+    color: #f1f1f1;
+}
+
+
 .output-message {
-    white-space: pre;
+    white-space: pre;    
+    margin: 20px 0px 0px 0px;
 }

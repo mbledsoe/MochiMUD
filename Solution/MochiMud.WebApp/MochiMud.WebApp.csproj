@@ -6,4 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MochiMud.Core\MochiMud.Core.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -16,3 +16,13 @@ steps:
     publishWebProjects: false
     projects: '**/MochiMud.WebApp.csproj'
     arguments: '-c Release -o $(Build.ArtifactStagingDirectory)'
+
+- task: AzureRmWebAppDeployment@5
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: '${{ variables.AzureSubscription }}'
+    appType: 'webAppLinux'
+    WebAppName: '${{ variables.AppServiceName }}'
+    packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+    RuntimeStack: 'DOTNETCORE|10.0'
+    DeploymentTypeLinux: 'oneDeploy'

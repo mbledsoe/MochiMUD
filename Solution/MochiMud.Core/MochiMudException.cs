@@ -1,7 +1,7 @@
 ﻿namespace MochiMud.Core
 {
 	[Serializable]
-	internal class MochiMudException : Exception
+	public class MochiMudException : Exception
 	{
 		public MochiMudException()
 		{

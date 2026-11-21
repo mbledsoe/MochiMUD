@@ -6,7 +6,7 @@ const MochiMudClient = function (view) {
     connection.on("ReceiveMessage", function (message) {
         var messageDiv = document.createElement("div");
         messageDiv.classList.add('output-message');
-        messageDiv.textContent = message;
+        messageDiv.innerHTML = message;
 
         view.output.appendChild(messageDiv);
     });
@@ -28,4 +28,6 @@ const MochiMudClient = function (view) {
             return console.error(err.toString());
         });
     }
+
+    view.textInput.focus();
 }

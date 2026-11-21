@@ -5,6 +5,7 @@ namespace MochiMud.Core.Workflows
 {
 	public class WorkflowManager : IWorkflowManager
 	{
+		// Only one active workflow per active player
 		private readonly ConcurrentDictionary<Guid, IWorkflow> activeWorkflows = new();
 		private readonly IServiceProvider serviceProvider;
 
@@ -16,7 +17,7 @@ namespace MochiMud.Core.Workflows
 		public void StartWorkflow<TWorkflow>(ActivePlayer activePlayer) where TWorkflow : IWorkflow
 		{
 			var workflow = ActivatorUtilities.CreateInstance<TWorkflow>(serviceProvider);
-			activeWorkflows.TryAdd(activePlayer.Id, workflow);
+			activeWorkflows[activePlayer.Id] = workflow;
 
 			workflow.Start(activePlayer);
 		}
@@ -34,6 +35,16 @@ namespace MochiMud.Core.Workflows
 		}
 
 		public void CancelWorkflow(ActivePlayer activePlayer)
+		{
+			activeWorkflows.TryRemove(activePlayer.Id, out var _);
+		}
+
+		public bool HasWorkflow(ActivePlayer activePlayer)
+		{
+			return activeWorkflows.ContainsKey(activePlayer.Id);
+		}
+
+		public void CompleteWorkflow(ActivePlayer activePlayer)
 		{
 			activeWorkflows.TryRemove(activePlayer.Id, out var _);
 		}

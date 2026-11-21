@@ -8,6 +8,7 @@ namespace MochiMud.WebApp.Services
 		public static IServiceCollection AddMochiMudWebApp(this IServiceCollection services)
 		{
 			services.AddSingleton<IPlayerOutput, SignalRPlayerOutput>();
+			services.AddHostedService<GameLoopHostedService>();
 
 			return services;
 		}

@@ -130,6 +130,8 @@ main {
     background: none;
     padding: 20px;
     color: #f1f1f1;
+    border: none;
+    outline: none;
 }
 
 .output-message {

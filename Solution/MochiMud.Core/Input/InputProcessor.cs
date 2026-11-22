@@ -1,4 +1,5 @@
 ﻿using MochiMud.Core.Commands;
+using MochiMud.Core.Output;
 using MochiMud.Core.Workflows;
 
 namespace MochiMud.Core.Input
@@ -9,20 +10,20 @@ namespace MochiMud.Core.Input
 		private readonly IActivePlayerManager activePlayerManager;
 		private readonly IWorkflowManager workflowManager;
 		private readonly ICommandProvider commandProvider;
-		private readonly IPlayerOutput playerOutput;
+		private readonly IOutputQueue outputQueue;
 
 		public InputProcessor(
 			IInputQueue inputQueue,
 			IActivePlayerManager activePlayerManager,
 			IWorkflowManager workflowManager,
 			ICommandProvider commandProvider,
-			IPlayerOutput playerOutput)
+			IOutputQueue outputQueue)
 		{
 			this.inputQueue = inputQueue;
 			this.activePlayerManager = activePlayerManager;
 			this.workflowManager = workflowManager;
 			this.commandProvider = commandProvider;
-			this.playerOutput = playerOutput;
+			this.outputQueue = outputQueue;
 		}
 
 		public void ProcessPendingInput()
@@ -54,7 +55,7 @@ namespace MochiMud.Core.Input
 
 				if (command == null)
 				{
-					playerOutput.Send(activePlayer, $"Sorry, I don't understand that command!");
+					outputQueue.Enqueue(new MochiMudOutput(activePlayer.Id, $"Sorry, I don't understand that command!"));
 					return;
 				}
 

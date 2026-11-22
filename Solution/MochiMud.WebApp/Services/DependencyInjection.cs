@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
 using MochiMud.Core;
+using MochiMud.Core.Output;
 
 namespace MochiMud.WebApp.Services
 {
@@ -7,7 +8,7 @@ namespace MochiMud.WebApp.Services
 	{
 		public static IServiceCollection AddMochiMudWebApp(this IServiceCollection services)
 		{
-			services.AddSingleton<IPlayerOutput, SignalRPlayerOutput>();
+			services.AddSingleton<IOutputSender, SignalROutputSender>();
 			services.AddHostedService<GameLoopHostedService>();
 
 			return services;

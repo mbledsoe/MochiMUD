@@ -9,6 +9,7 @@ const MochiMudClient = function (view) {
         messageDiv.innerHTML = message;
 
         view.output.appendChild(messageDiv);
+        view.output.scrollTop = view.output.scrollHeight;
     });
 
     view.formInput.addEventListener("submit", (ev) => {

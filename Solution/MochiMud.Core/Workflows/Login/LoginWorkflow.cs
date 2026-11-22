@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Microsoft.Extensions.Options;
 using MochiMud.Core.Config;
+using MochiMud.Core.Output;
 using MochiMud.Core.World;
 
 namespace MochiMud.Core.Workflows.Login
@@ -11,7 +12,7 @@ namespace MochiMud.Core.Workflows.Login
 		private readonly IActivePlayerManager activePlayerManager;
 		private readonly IPlayerLocationManager playerLocationManager;
 		private readonly IRoomDataService roomDataService;
-		private readonly IPlayerOutput playerOutput;
+		private readonly IOutputQueue outputQueue;
 		private readonly IWorkflowManager workflowManager;
 
 		// workflow state / context
@@ -23,14 +24,14 @@ namespace MochiMud.Core.Workflows.Login
 			IActivePlayerManager activePlayerManager,
 			IPlayerLocationManager playerLocationManager,
 			IRoomDataService roomDataService,
-			IPlayerOutput playerOutput,
+			IOutputQueue outputQueue,
 			IWorkflowManager workflowManager)
 		{
 			this.gameOptions = gameOptions;
 			this.activePlayerManager = activePlayerManager;
 			this.playerLocationManager = playerLocationManager;
 			this.roomDataService = roomDataService;
-			this.playerOutput = playerOutput;
+			this.outputQueue = outputQueue;
 			this.workflowManager = workflowManager;
 		}
 
@@ -38,7 +39,7 @@ namespace MochiMud.Core.Workflows.Login
 		{
 			activePlayerId = activePlayer.Id;
 			state = LoginState.WaitingForUsername;
-			playerOutput.Send(activePlayer, "By what name shall you be known?");
+			outputQueue.Enqueue(new MochiMudOutput(activePlayerId, "By what name shall you be known?"));
 		}
 
 		public void HandleInput(string input)
@@ -73,8 +74,8 @@ namespace MochiMud.Core.Workflows.Login
 			sb.AppendLine($"<div>{roomData.Title}</div>");
 			sb.AppendLine($"<div>{roomData.Description}</div>");
 
-			playerOutput.Send(activePlayer, "You are entering the realm!");
-			playerOutput.Send(activePlayer, sb.ToString());
+			outputQueue.Enqueue(new MochiMudOutput(activePlayer.Id, "You are entering the realm!"));
+			outputQueue.Enqueue(new MochiMudOutput(activePlayer.Id, sb.ToString()));
 
 			workflowManager.CompleteWorkflow(activePlayer);
 		}

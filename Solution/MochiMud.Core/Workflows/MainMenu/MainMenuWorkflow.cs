@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using MochiMud.Core.Output;
 using MochiMud.Core.Workflows.Login;
 
 namespace MochiMud.Core.Workflows.MainMenu
@@ -6,17 +7,17 @@ namespace MochiMud.Core.Workflows.MainMenu
 	public class MainMenuWorkflow : IWorkflow
 	{
 		private readonly IActivePlayerManager activePlayerManager;
-		private readonly IPlayerOutput playerOutput;
+		private readonly IOutputQueue outputQueue;
 		private readonly IWorkflowManager workflowManager;
 		private Guid activePlayerId;
 
 		public MainMenuWorkflow(
 			IActivePlayerManager activePlayerManager,
-			IPlayerOutput playerOutput,
+			IOutputQueue outputQueue,
 			IWorkflowManager workflowManager)
 		{
 			this.activePlayerManager = activePlayerManager;
-			this.playerOutput = playerOutput;
+			this.outputQueue = outputQueue;
 			this.workflowManager = workflowManager;
 		}
 
@@ -32,7 +33,7 @@ namespace MochiMud.Core.Workflows.MainMenu
 			sb.AppendLine("<div>Please make a selection</div>");
 			sb.AppendLine("<div>1) Enter MochiMUD</div>");
 
-			playerOutput.Send(player, sb.ToString());
+			outputQueue.Enqueue(new MochiMudOutput(player.Id, sb.ToString()));
 		}
 
 		public void HandleInput(string input)

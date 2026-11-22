@@ -17,8 +17,9 @@ namespace MochiMud.WebApp.Services
 			{
 				await gameLoop.Run(ct);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
+
 				// todo: log unhandled exception from the game loop and shut down.
 			}			
 		}

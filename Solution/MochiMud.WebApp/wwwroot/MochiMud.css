@@ -102,13 +102,17 @@ main {
 
 #output {
     background-color: #262626;
-    overflow-y: scroll;
+    overflow-y: auto;
     min-height: 900px;
+    max-height: 900px;
     box-shadow: 0px 0px 10px #1a1a1a;
     padding: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: end;
+}
+
+#output > :first-child {
+    margin-top: auto;
 }
 
 #input {

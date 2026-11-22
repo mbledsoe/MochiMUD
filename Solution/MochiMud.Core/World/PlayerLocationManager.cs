@@ -15,5 +15,10 @@ namespace MochiMud.Core.World
 		{
 			playerRooms.TryRemove(player.Id, out var _);
 		}
+
+		public Guid GetPlayerRoomId(ActivePlayer player)
+		{
+			return playerRooms[player.Id];
+		}
 	}
 }

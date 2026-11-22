@@ -1,8 +1,6 @@
 ﻿namespace MochiMud.Core.Input
 {
-	public interface IInputQueue
+	public interface IInputQueue : IGameQueue<MochiMudInput>
 	{
-		IReadOnlyList<MochiMudInput> DequeueAllPending();
-		void Enqueue(MochiMudInput input);
 	}
 }

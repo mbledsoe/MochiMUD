@@ -65,6 +65,7 @@ body {
     color: #f1f1f1;
     font-size: 12pt;
     font-family: Consolas, Courier New, Courier, monospace;
+    line-height: 125%;
 }
 
 input {
@@ -80,9 +81,9 @@ header {
     background-color: #111111;
 }
 
-header h1 {
-    font-weight: bold;
-}
+    header h1 {
+        font-weight: bold;
+    }
 
 #header-content {
     margin: auto;
@@ -111,13 +112,13 @@ main {
     flex-direction: column;
 }
 
-#output > :first-child {
-    margin-top: auto;
-}
+    #output > :first-child {
+        margin-top: auto;
+    }
 
 #input {
     background-color: #262626;
-    box-shadow: 0px 0px 10px #1a1a1a;    
+    box-shadow: 0px 0px 10px #1a1a1a;
     margin: 10px 0px 0px 0px;
     display: flex;
 }
@@ -131,8 +132,14 @@ main {
     color: #f1f1f1;
 }
 
-
 .output-message {
-    white-space: pre;    
     margin: 20px 0px 0px 0px;
+}
+
+.room-title {
+    color: #ffcc66;
+}
+
+.room-desc {
+
 }

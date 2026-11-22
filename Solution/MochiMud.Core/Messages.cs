@@ -1,8 +1,9 @@
-﻿namespace MochiMud.WebApp
+﻿namespace MochiMud.Core
 {
 	public class Messages
 	{
 		public const string Welcome = @"
+<pre>
                     ______________________
               _..--'                      '--.._
           _.-'                                  '-._
@@ -36,7 +37,7 @@
        | |\/| |/ _ \ / __| '_ \| | |\/| | | | | | | | |   
        | |  | | (_) | (__| | | | | |  | | |_| | |/ /|_|   
        \_|  |_/\___/ \___|_| |_|_\_|  |_/\___/|___/ (_)   
-                                                          
-                                                          ";
+
+</pre>";
 	}
 }

@@ -25,11 +25,9 @@ namespace MochiMud.WebApp.Hubs
 
 		public override async Task OnConnectedAsync()
 		{
-			await Clients.Caller.SendAsync("ReceiveMessage", Messages.Welcome);
 			await base.OnConnectedAsync();
-
+			
 			var activePlayer = activePlayerManager.CreateActivePlayer(Context.ConnectionId);
-
 			workflowManager.StartWorkflow<MainMenuWorkflow>(activePlayer);
 		}
 

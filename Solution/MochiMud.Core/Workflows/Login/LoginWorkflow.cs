@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Numerics;
+using System.Text;
 using Microsoft.Extensions.Options;
 using MochiMud.Core.Config;
 using MochiMud.Core.Output;
@@ -14,6 +15,7 @@ namespace MochiMud.Core.Workflows.Login
 		private readonly IRoomDataService roomDataService;
 		private readonly IOutputQueue outputQueue;
 		private readonly IWorkflowManager workflowManager;
+		private readonly IOutputBuilder outputBuilder;
 
 		// workflow state / context
 		private LoginState state = LoginState.Pending;
@@ -25,7 +27,8 @@ namespace MochiMud.Core.Workflows.Login
 			IPlayerLocationManager playerLocationManager,
 			IRoomDataService roomDataService,
 			IOutputQueue outputQueue,
-			IWorkflowManager workflowManager)
+			IWorkflowManager workflowManager,
+			IOutputBuilder outputBuilder)
 		{
 			this.gameOptions = gameOptions;
 			this.activePlayerManager = activePlayerManager;
@@ -33,6 +36,7 @@ namespace MochiMud.Core.Workflows.Login
 			this.roomDataService = roomDataService;
 			this.outputQueue = outputQueue;
 			this.workflowManager = workflowManager;
+			this.outputBuilder = outputBuilder;
 		}
 
 		public void Start(ActivePlayer activePlayer)
@@ -70,12 +74,8 @@ namespace MochiMud.Core.Workflows.Login
 			playerLocationManager.MovePlayerToRoom(activePlayer, startingRoomId);
 			var roomData = roomDataService.GetRoom(startingRoomId);
 
-			var sb = new StringBuilder();
-			sb.AppendLine($"<div>{roomData.Title}</div>");
-			sb.AppendLine($"<div>{roomData.Description}</div>");
-
 			outputQueue.Enqueue(new MochiMudOutput(activePlayer.Id, "You are entering the realm!"));
-			outputQueue.Enqueue(new MochiMudOutput(activePlayer.Id, sb.ToString()));
+			outputQueue.Enqueue(new MochiMudOutput(activePlayer.Id, outputBuilder.BuildRoomOutput(roomData)));
 
 			workflowManager.CompleteWorkflow(activePlayer);
 		}

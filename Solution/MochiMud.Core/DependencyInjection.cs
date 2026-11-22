@@ -31,6 +31,7 @@ namespace MochiMud.Core
 
 			services.AddSingleton<IOutputQueue, OutputQueue>();
 			services.AddSingleton<IOutputProcessor, OutputProcessor>();
+			services.AddSingleton<IOutputBuilder, HtmlOutputBuilder>();
 
 			// Command processing
 			services.AddSingleton<ICommand, QuitCommand>();

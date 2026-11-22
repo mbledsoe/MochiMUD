@@ -10,17 +10,20 @@ namespace MochiMud.Core.Commands
 		private readonly IPlayerLocationManager playerLocationManager;
 		private readonly IRoomDataService roomDataService;
 		private readonly IOutputQueue outputQueue;
+		private readonly IOutputBuilder outputBuilder;
 
 		public string CommandName => "look";
 
 		public LookCommand(
 			IPlayerLocationManager playerLocationManager,
 			IRoomDataService roomDataService,
-			IOutputQueue outputQueue)
+			IOutputQueue outputQueue,
+			IOutputBuilder outputBuilder)
 		{
 			this.playerLocationManager = playerLocationManager;
 			this.roomDataService = roomDataService;
 			this.outputQueue = outputQueue;
+			this.outputBuilder = outputBuilder;
 		}
 
 		public void Execute(ActivePlayer player, MochiMudInput input)
@@ -28,11 +31,7 @@ namespace MochiMud.Core.Commands
 			var roomId = playerLocationManager.GetPlayerRoomId(player);
 			var roomData = roomDataService.GetRoom(roomId);
 
-			var sb = new StringBuilder();
-			sb.AppendLine($"<div>{roomData.Title}</div>");
-			sb.AppendLine($"<div>{roomData.Description}</div>");
-
-			outputQueue.Enqueue(new MochiMudOutput(player.Id, sb.ToString()));
+			outputQueue.Enqueue(new MochiMudOutput(player.Id, outputBuilder.BuildRoomOutput(roomData)));
 		}
 	}
 }

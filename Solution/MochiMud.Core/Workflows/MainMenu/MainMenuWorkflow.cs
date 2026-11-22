@@ -9,16 +9,19 @@ namespace MochiMud.Core.Workflows.MainMenu
 		private readonly IActivePlayerManager activePlayerManager;
 		private readonly IOutputQueue outputQueue;
 		private readonly IWorkflowManager workflowManager;
+		private readonly IOutputBuilder outputBuilder;
 		private Guid activePlayerId;
 
 		public MainMenuWorkflow(
 			IActivePlayerManager activePlayerManager,
 			IOutputQueue outputQueue,
-			IWorkflowManager workflowManager)
+			IWorkflowManager workflowManager,
+			IOutputBuilder outputBuilder)
 		{
 			this.activePlayerManager = activePlayerManager;
 			this.outputQueue = outputQueue;
 			this.workflowManager = workflowManager;
+			this.outputBuilder = outputBuilder;
 		}
 
 		public void Start(ActivePlayer player)
@@ -29,11 +32,8 @@ namespace MochiMud.Core.Workflows.MainMenu
 
 		private void SendMenuOutput(ActivePlayer player)
 		{
-			var sb = new StringBuilder();
-			sb.AppendLine("<div>Please make a selection</div>");
-			sb.AppendLine("<div>1) Enter MochiMUD</div>");
-
-			outputQueue.Enqueue(new MochiMudOutput(player.Id, sb.ToString()));
+			outputQueue.Enqueue(new MochiMudOutput(player.Id, outputBuilder.BuildWelcomeMessage()));
+			outputQueue.Enqueue(new MochiMudOutput(player.Id, outputBuilder.BuildMainMenuPrompt()));
 		}
 
 		public void HandleInput(string input)

@@ -159,3 +159,13 @@ main {
     margin-top: 0em;
     color: #2b80d5;
 }
+
+.command-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.command-name {
+    width: 10%;
+}

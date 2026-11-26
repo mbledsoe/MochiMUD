@@ -49,7 +49,9 @@ namespace MochiMud.Core
 			services.AddSingleton(sp => (ICommand)ActivatorUtilities.CreateInstance(sp, typeof(MoveCommand), Direction.East));
 			services.AddSingleton(sp => (ICommand)ActivatorUtilities.CreateInstance(sp, typeof(MoveCommand), Direction.West));
 			services.AddSingleton<ICommand, ExitsCommand>();
+			services.AddSingleton<ICommand, HelpCommand>();
 
+			services.AddSingleton<ICommandCatalog, CommandCatalog>();
 			services.AddSingleton<ICommandProvider, CommandProvider>();
 
 			services.AddSingleton<GameLoop>();

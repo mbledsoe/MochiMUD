@@ -36,7 +36,7 @@ namespace MochiMud.Core.Commands
 
 			if (exit == null)
 			{
-				outputQueue.Enqueue(new MochiMudOutput(player.Id, "There is not exit in that direction."));
+				outputQueue.Enqueue(new MochiMudOutput(player.Id, "There is no exit in that direction."));
 				return;
 			}
 

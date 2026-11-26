@@ -52,5 +52,23 @@ namespace MochiMud.Core.Output
 
 			return sb.ToString();
 		}
+
+		public string BuildCommandList(IEnumerable<string> commands)
+		{
+			var sb = new StringBuilder();
+
+			sb.Append("<div>The following commands are available:</div>");
+
+			sb.Append("<div class=\"command-list\">");
+
+			foreach (var command in commands)
+			{
+				sb.Append($"<div class=\"command-name\">{command}</div>");
+			}
+
+			sb.Append("</div>");
+
+			return sb.ToString();
+		}
 	}
 }

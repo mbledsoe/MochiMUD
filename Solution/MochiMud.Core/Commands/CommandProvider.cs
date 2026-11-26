@@ -5,11 +5,13 @@ namespace MochiMud.Core.Commands
 	{
 		private Dictionary<string, ICommand> commands = new();
 
-		public CommandProvider(IEnumerable<ICommand> commandList)
+		public CommandProvider(IEnumerable<ICommand> commandList,
+			ICommandCatalog commandCatalog)
 		{
 			foreach (var command in commandList)
 			{
 				commands.Add(command.CommandName, command);
+				commandCatalog.AddEntry(command.CommandName);
 			}
 		}
 

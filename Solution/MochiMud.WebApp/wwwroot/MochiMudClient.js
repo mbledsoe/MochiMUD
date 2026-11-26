@@ -11,26 +11,36 @@ function resizeUI(view) {
     scrollDown(view.output);
 }
 
+function createOutputMessage(message) {
+    var messageDiv = document.createElement("div");
+    messageDiv.classList.add('output-message');
+    messageDiv.innerHTML = message;
+
+    return messageDiv;
+}
+
+function outputMessage(message, output) {
+    output.appendChild(createOutputMessage(message));
+    scrollDown(view.output);
+}
+
+function sendMessage(textInput, connection) {
+    var message = textInput.value;
+    connection.invoke("SendMessage", message);
+    view.textInput.value = "";
+    view.textInput.focus();
+}
+
 const MochiMudClient = function (view) {
     var connection = new signalR.HubConnectionBuilder().withUrl("/MochiMudHub").build();
 
     connection.on("ReceiveMessage", function (message) {
-        var messageDiv = document.createElement("div");
-        messageDiv.classList.add('output-message');
-        messageDiv.innerHTML = message;
-
-        view.output.appendChild(messageDiv);
-        scrollDown(view.output);
+        outputMessage(message, view.output);
     });
 
     view.formInput.addEventListener("submit", (ev) => {
         ev.preventDefault();
-        var message = textInput.value;
-
-        connection.invoke("SendMessage", message);
-
-        view.textInput.value = "";
-        view.textInput.focus();
+        sendMessage(view.textInput, connection);
     });
 
     this.start = function () {
@@ -41,11 +51,10 @@ const MochiMudClient = function (view) {
         });
     }
 
-    resizeUI(view);
-
     window.addEventListener('resize', () => {
         resizeUI(view);
     });
 
+    resizeUI(view);
     view.textInput.focus();
 }

@@ -79,6 +79,7 @@ input {
 
 header {
     background-color: #111111;
+    display: none;
 }
 
     header h1 {
@@ -92,7 +93,7 @@ header {
 }
 
 main {
-    padding: 20px 0px;
+    padding: 0px 0px;
 }
 
 .container {
@@ -101,15 +102,21 @@ main {
     padding: 0px 20px;
 }
 
+#ui {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    gap: 10px;
+}
+
 #output {
     background-color: #262626;
     overflow-y: auto;
-    min-height: 900px;
-    max-height: 900px;
     box-shadow: 0px 0px 10px #1a1a1a;
     padding: 20px;
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
 }
 
     #output > :first-child {
@@ -119,7 +126,8 @@ main {
 #input {
     background-color: #262626;
     box-shadow: 0px 0px 10px #1a1a1a;
-    margin: 10px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px;
     display: flex;
 }
 
@@ -127,7 +135,7 @@ main {
     display: block;
     width: 100%;
     border: none;
-    background: none;
+    background-color: #262626;
     padding: 20px;
     color: #f1f1f1;
     border: none;
@@ -143,5 +151,11 @@ main {
 }
 
 .room-desc {
+    max-width: 800px;
 
+}
+
+.exits {
+    margin-top: 0em;
+    color: #2b80d5;
 }

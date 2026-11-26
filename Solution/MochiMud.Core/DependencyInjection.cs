@@ -20,7 +20,15 @@ namespace MochiMud.Core
 				.ValidateOnStart();
 
 			// Data services
-			services.AddSingleton<IRoomDataService, RoomDataService>();
+			services.AddSingleton<IRoomDataStore, StaticRoomDataStore>();
+			services.AddSingleton<IRoomDataService>(provider =>
+			{
+				var roomDataStore = provider.GetRequiredService<IRoomDataStore>();
+				var roomDataService = new RoomDataService();
+				roomDataService.Initialize(roomDataStore);
+
+				return roomDataService;
+			});
 
 			// Core game services
 			services.AddSingleton<IActivePlayerManager, ActivePlayerManager>();
@@ -36,6 +44,12 @@ namespace MochiMud.Core
 			// Command processing
 			services.AddSingleton<ICommand, QuitCommand>();
 			services.AddSingleton<ICommand, LookCommand>();
+			services.AddSingleton(sp => (ICommand)ActivatorUtilities.CreateInstance(sp, typeof(MoveCommand), Direction.North));
+			services.AddSingleton(sp => (ICommand)ActivatorUtilities.CreateInstance(sp, typeof(MoveCommand), Direction.South));
+			services.AddSingleton(sp => (ICommand)ActivatorUtilities.CreateInstance(sp, typeof(MoveCommand), Direction.East));
+			services.AddSingleton(sp => (ICommand)ActivatorUtilities.CreateInstance(sp, typeof(MoveCommand), Direction.West));
+			services.AddSingleton<ICommand, ExitsCommand>();
+
 			services.AddSingleton<ICommandProvider, CommandProvider>();
 
 			services.AddSingleton<GameLoop>();

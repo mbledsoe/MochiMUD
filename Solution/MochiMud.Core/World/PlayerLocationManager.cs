@@ -8,7 +8,7 @@ namespace MochiMud.Core.World
 
 		public void MovePlayerToRoom(ActivePlayer player, Guid roomId)
 		{
-			playerRooms.AddOrUpdate(player.Id, roomId, (playerId, roomId) => roomId);
+			playerRooms[player.Id] = roomId;
 		}
 
 		public void RemovePlayer(ActivePlayer player)

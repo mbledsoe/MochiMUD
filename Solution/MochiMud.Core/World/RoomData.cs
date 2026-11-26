@@ -1,7 +1,8 @@
 ﻿namespace MochiMud.Core.World
 {
-	public record RoomData(
+	public record RoomData(		
 		Guid Id,
 		string Title,
-		string Description);
+		string Description,
+		IList<Exit> Exits);
 }

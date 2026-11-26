@@ -7,5 +7,6 @@ namespace MochiMud.Core.Output
 		string BuildWelcomeMessage();
 		string BuildRoomOutput(RoomData roomData);
 		string BuildMainMenuPrompt();
+		string BuildExitsOutput(RoomData currentRoomData);
 	}
 }

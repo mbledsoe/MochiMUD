@@ -1,5 +1,16 @@
 ﻿"use strict";
 
+function scrollDown(element) {
+    element.scrollTop = element.scrollHeight;
+}
+
+function resizeUI(view) {
+    var uiHeight = document.documentElement.clientHeight;
+    view.ui.style.padding = '20px 0px';
+    view.ui.style.height = `${uiHeight}px`;
+    scrollDown(view.output);
+}
+
 const MochiMudClient = function (view) {
     var connection = new signalR.HubConnectionBuilder().withUrl("/MochiMudHub").build();
 
@@ -9,7 +20,7 @@ const MochiMudClient = function (view) {
         messageDiv.innerHTML = message;
 
         view.output.appendChild(messageDiv);
-        view.output.scrollTop = view.output.scrollHeight;
+        scrollDown(view.output);
     });
 
     view.formInput.addEventListener("submit", (ev) => {
@@ -29,6 +40,12 @@ const MochiMudClient = function (view) {
             return console.error(err.toString());
         });
     }
+
+    resizeUI(view);
+
+    window.addEventListener('resize', () => {
+        resizeUI(view);
+    });
 
     view.textInput.focus();
 }
